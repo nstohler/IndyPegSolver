@@ -336,7 +336,7 @@ public class Board
                 if (slots[i, j] == SlotState.Hole)
                 {
                     var pointRating = new PointRating(new Point(i, j));
-                    //pointRating.AddFiller(new PegPlacement(new Point(i, j), SlotState.Left));
+                    //pointRating.AddFiller(new PegPlacement(new Point(i, j), SlotState.Left)); // ??? should this be added here?
                     AddFillers(pointRating);
                     pointRatings.Add(pointRating);
                 }
@@ -394,6 +394,93 @@ public class Board
                 }
                 pointRating.AddFiller(new PegPlacement(newPosition, SlotState.Right));
                 newPosition = new Point(newPosition.X + dx, newPosition.Y + dy);
+            }
+        }
+    }
+
+    public List<PegPlacementRating> GeneratePegPlacementRatings()
+    {
+        var pegPlacementRatings = new List<PegPlacementRating>();
+
+        for (int i = 0; i < Width; i++)
+        {
+            for (int j = 0; j < Height; j++)
+            {
+                Point position = new Point(i, j);
+                if (GetSlotState(position) == SlotState.Hole)
+                {
+                    // Generate PegPlacementRating for Left turn
+                    var leftPlacement = new PegPlacement(position, SlotState.Left);
+                    var leftRating = new PegPlacementRating(leftPlacement);
+                    AddFilledPoints(leftRating);
+                    pegPlacementRatings.Add(leftRating);
+
+                    // Generate PegPlacementRating for Right turn
+                    var rightPlacement = new PegPlacement(position, SlotState.Right);
+                    var rightRating = new PegPlacementRating(rightPlacement);
+                    AddFilledPoints(rightRating);
+                    pegPlacementRatings.Add(rightRating);
+                }
+            }
+        }
+
+        return pegPlacementRatings;
+    }
+
+    private void AddFilledPoints(PegPlacementRating pegPlacementRating)
+    {
+        Point position = pegPlacementRating.PegPlacement.Position;
+        SlotState state = pegPlacementRating.PegPlacement.State;
+
+        if (state == SlotState.Left)
+        {
+            // Fill directly adjacent points
+            int[,] directions = new int[,]
+            {
+            { -1, -1 }, { -1, 0 }, { -1, 1 },
+            { 0, -1 },           { 0, 1 },
+            { 1, -1 }, { 1, 0 }, { 1, 1 }
+            };
+
+            for (int i = 0; i < directions.GetLength(0); i++)
+            {
+                Point newPosition = new Point(position.X + directions[i, 0], position.Y + directions[i, 1]);
+
+                if (newPosition.X >= 0 && newPosition.X < Width && newPosition.Y >= 0 && newPosition.Y < Height)
+                {
+                    SlotState currentState = GetSlotState(newPosition);
+                    if (currentState == SlotState.Hole || currentState == SlotState.Filled)
+                    {
+                        pegPlacementRating.AddFilledPoint(newPosition);
+                    }
+                }
+            }
+        }
+        else if (state == SlotState.Right)
+        {
+            // Fill horizontally and vertically until a solid point or the edge of the board is reached
+            int[,] directions = new int[,]
+            {
+            { 0, -1 }, { 0, 1 },
+            { -1, 0 }, { 1, 0 }
+            };
+
+            for (int i = 0; i < directions.GetLength(0); i++)
+            {
+                int dx = directions[i, 0];
+                int dy = directions[i, 1];
+                Point newPosition = new Point(position.X + dx, position.Y + dy);
+
+                while (newPosition.X >= 0 && newPosition.X < Width && newPosition.Y >= 0 && newPosition.Y < Height)
+                {
+                    SlotState currentState = GetSlotState(newPosition);
+                    if (currentState == SlotState.Solid)
+                    {
+                        break;
+                    }
+                    pegPlacementRating.AddFilledPoint(newPosition);
+                    newPosition = new Point(newPosition.X + dx, newPosition.Y + dy);
+                }
             }
         }
     }

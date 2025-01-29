@@ -3,7 +3,7 @@
 public class PointRating
 {
     public Point HolePosition { get; }
-    public List<PegPlacement> Fillers { get; }
+    public List<PegPlacement> Fillers { get; } // TODO: sort later when PegPlacementRating is here!
 
     public PointRating(Point holePosition)
     {
