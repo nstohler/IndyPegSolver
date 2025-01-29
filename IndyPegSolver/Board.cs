@@ -87,6 +87,22 @@ public class Board
         return true;
     }
 
+    public int CountUnfilledHoles()
+    {
+        int count = 0;
+        for (int i = 0; i < Width; i++)
+        {
+            for (int j = 0; j < Height; j++)
+            {
+                if (slots[i, j] == SlotState.Hole)
+                {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
     public Board Combine(Board other)
     {
         if (Width != other.Width || Height != other.Height)
@@ -130,10 +146,8 @@ public class Board
         if (state1 == SlotState.Filled && state2 == SlotState.Right) return SlotState.Right;
         if (state1 == SlotState.Left && state2 == SlotState.Hole) return SlotState.Left;
         if (state1 == SlotState.Left && state2 == SlotState.Filled) return SlotState.Left;
-        //if (state1 == SlotState.Left && state2 == SlotState.Left) return SlotState.Left;
         if (state1 == SlotState.Right && state2 == SlotState.Hole) return SlotState.Right;
         if (state1 == SlotState.Right && state2 == SlotState.Filled) return SlotState.Right;
-        //if (state1 == SlotState.Right && state2 == SlotState.Right) return SlotState.Right;
 
         throw new InvalidOperationException("Invalid combination of slot states");
     }

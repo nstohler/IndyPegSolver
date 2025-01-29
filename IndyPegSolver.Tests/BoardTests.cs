@@ -101,8 +101,59 @@ namespace IndyPegSolver.Tests
         }
 
         [Fact]
+        public void Board_ShouldDetectUnsolvedState()
+        {
+            // Arrange
+            char[,] initialState = {
+                { 'X', 'X', 'X', 'R' },
+                { 'X', 'X', '-', 'X' },
+                { 'X', 'X', '-', 'X' },
+                { '-', 'R', 'X', 'X' },
+                { '-', '-', 'L', 'X' },
+                { '-', 'X', 'X', '-' },
+                { '-', '-', 'X', '-' },
+                { '-', '-', 'X', '-' },
+                { 'X', 'X', 'O', 'X' } // One slot is still a hole
+            };
+            Board board = new Board(initialState);
+
+            // Act
+            bool isSolved = board.IsSolved();
+
+            // Assert
+            isSolved.ShouldBeFalse();
+        }
+
+        [Fact]
+        public void Board_ShouldCountUnfilledHolesCorrectly()
+        {
+            // Arrange
+            // not a valid board state, but it's fine for testing
+            char[,] initialState = {                
+                { 'O', 'X', 'X', 'R' },
+                { 'X', 'O', '-', 'X' },
+                { 'X', 'X', '-', 'X' },
+                { '-', 'R', 'X', 'O' },
+                { '-', '-', 'L', 'X' },
+                { '-', 'O', 'X', '-' },
+                { '-', '-', 'X', '-' },
+                { '-', '-', 'X', '-' },
+                { 'X', 'X', 'O', 'X' } // One slot is still a hole
+            };
+            Board board = new Board(initialState);
+
+            // Act
+            int unfilledHoles = board.CountUnfilledHoles();
+
+            // Assert
+            unfilledHoles.ShouldBe(5);
+        }
+
+        [Fact]
         public void Board_ShouldCombineCorrectly()
         {
+            // TODO: parameterized test here as well?
+
             // Arrange
             char[,] initialState1 = {
                 { 'O', 'O', 'O', 'O' },
@@ -116,15 +167,15 @@ namespace IndyPegSolver.Tests
                 { 'O', 'O', 'O', 'O' }
             };
             char[,] initialState2 = {
-                { 'X', 'X', 'X', 'X' },
+                { 'X', 'X', 'X', 'R' },
                 { 'X', 'X', '-', 'X' },
                 { 'X', 'X', '-', 'X' },
-                { '-', 'X', 'X', 'X' },
-                { '-', '-', 'X', 'X' },
+                { '-', 'R', 'X', 'X' },
+                { '-', '-', 'L', 'X' },
                 { '-', 'X', 'X', '-' },
                 { '-', '-', 'X', '-' },
                 { '-', '-', 'X', '-' },
-                { 'X', 'X', 'X', 'X' }
+                { 'X', 'X', 'R', 'X' }
             };
             Board board1 = new Board(initialState1);
             Board board2 = new Board(initialState2);
@@ -683,7 +734,7 @@ namespace IndyPegSolver.Tests
                 board.PrintBoard();
 
                 // Assert
-                var expectedOutput = "O O O O \nO O - O \nO O - O \n- O O O \n- - O O \n- O O - \n- - O - \n- - O - \nO O O O \n";
+                var expectedOutput = $"O O O O {Environment.NewLine}O O - O {Environment.NewLine}O O - O {Environment.NewLine}- O O O {Environment.NewLine}- - O O {Environment.NewLine}- O O - {Environment.NewLine}- - O - {Environment.NewLine}- - O - {Environment.NewLine}O O O O {Environment.NewLine}";
                 sw.ToString().ShouldBe(expectedOutput);
             }
         }
@@ -710,7 +761,7 @@ namespace IndyPegSolver.Tests
             board.SaveBoardToFile(filePath);
 
             // Assert
-            var expectedOutput = "O O O O \nO O - O \nO O - O \n- O O O \n- - O O \n- O O - \n- - O - \n- - O - \nO O O O \n";
+            var expectedOutput = $"O O O O {Environment.NewLine}O O - O {Environment.NewLine}O O - O {Environment.NewLine}- O O O {Environment.NewLine}- - O O {Environment.NewLine}- O O - {Environment.NewLine}- - O - {Environment.NewLine}- - O - {Environment.NewLine}O O O O {Environment.NewLine}";
             File.ReadAllText(filePath).ShouldBe(expectedOutput);
 
             // Clean up
