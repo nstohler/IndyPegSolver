@@ -29,7 +29,9 @@ namespace IndyPegSolver.Tests
 
             // Assert
             Assert.Equal(original, copy);
+            #pragma warning disable CA2013 
             Assert.False(ReferenceEquals(original, copy)); // Ensure they are not the same reference
+            #pragma warning restore CA2013
         }
 
         [Fact]
