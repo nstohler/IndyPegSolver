@@ -64,6 +64,32 @@ namespace IndyPegSolver.Tests
         }
 
         [Fact]
+        public void Clear_ShouldSetNonSolidSlotsToHole()
+        {
+            // Arrange
+            var board = new Board(5, 5);
+            board.SetSlotState(1, 1, SlotState.Hole);
+            board.SetSlotState(2, 2, SlotState.Left);
+            board.SetSlotState(3, 3, SlotState.Right);
+            board.SetSlotState(4, 4, SlotState.Filled);
+
+            // Act
+            board.Clear();
+
+            // Assert
+            for (int i = 0; i < board.Width; i++)
+            {
+                for (int j = 0; j < board.Height; j++)
+                {
+                    if (board.GetSlotState(i, j) != SlotState.Solid)
+                    {
+                        Assert.Equal(SlotState.Hole, board.GetSlotState(i, j));
+                    }
+                }
+            }
+        }
+
+        [Fact]
         public void Board_ShouldSetSlotStateCorrectly()
         {
             // Arrange

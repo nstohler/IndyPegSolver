@@ -169,7 +169,7 @@ public class Board
         if (pegState == SlotState.Right) FillAffectedSlotsOnTurnRight(x, y);
     }
 
-    internal void FillAffectedSlotsOnTurnLeft(int x, int y)
+    private void FillAffectedSlotsOnTurnLeft(int x, int y)
     {
         // this is only for turn left so far
         int[,] directions = new int[,]
@@ -195,7 +195,7 @@ public class Board
         }
     }
 
-    internal void FillAffectedSlotsOnTurnRight(int x, int y)
+    private void FillAffectedSlotsOnTurnRight(int x, int y)
     {
         // Directions for horizontal and vertical movement
         int[,] directions = new int[,]
@@ -271,6 +271,20 @@ public class Board
             }
         }
         return newBoard;
+    }
+
+    public void Clear()
+    {
+        for (int i = 0; i < Width; i++)
+        {
+            for (int j = 0; j < Height; j++)
+            {
+                if (slots[i, j] != SlotState.Solid)
+                {
+                    slots[i, j] = SlotState.Hole;
+                }
+            }
+        }
     }
 
     private SlotState CharToSlotState(char c)
