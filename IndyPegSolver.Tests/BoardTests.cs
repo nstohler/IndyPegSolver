@@ -658,5 +658,63 @@ namespace IndyPegSolver.Tests
                 _ => throw new ArgumentException("Invalid character for slot state")
             };
         }
+
+        [Fact]
+        public void Board_ShouldPrintBoardCorrectly()
+        {
+            // Arrange
+            char[,] initialState = {
+                { 'O', 'O', 'O', 'O' },
+                { 'O', 'O', '-', 'O' },
+                { 'O', 'O', '-', 'O' },
+                { '-', 'O', 'O', 'O' },
+                { '-', '-', 'O', 'O' },
+                { '-', 'O', 'O', '-' },
+                { '-', '-', 'O', '-' },
+                { '-', '-', 'O', '-' },
+                { 'O', 'O', 'O', 'O' }
+            };
+            Board board = new Board(initialState);
+            using (var sw = new StringWriter())
+            {
+                Console.SetOut(sw);
+
+                // Act
+                board.PrintBoard();
+
+                // Assert
+                var expectedOutput = "O O O O \nO O - O \nO O - O \n- O O O \n- - O O \n- O O - \n- - O - \n- - O - \nO O O O \n";
+                sw.ToString().ShouldBe(expectedOutput);
+            }
+        }
+
+        [Fact]
+        public void Board_ShouldSaveBoardToFileCorrectly()
+        {
+            // Arrange
+            char[,] initialState = {
+                { 'O', 'O', 'O', 'O' },
+                { 'O', 'O', '-', 'O' },
+                { 'O', 'O', '-', 'O' },
+                { '-', 'O', 'O', 'O' },
+                { '-', '-', 'O', 'O' },
+                { '-', 'O', 'O', '-' },
+                { '-', '-', 'O', '-' },
+                { '-', '-', 'O', '-' },
+                { 'O', 'O', 'O', 'O' }
+            };
+            Board board = new Board(initialState);
+            string filePath = "test_board.txt";
+
+            // Act
+            board.SaveBoardToFile(filePath);
+
+            // Assert
+            var expectedOutput = "O O O O \nO O - O \nO O - O \n- O O O \n- - O O \n- O O - \n- - O - \n- - O - \nO O O O \n";
+            File.ReadAllText(filePath).ShouldBe(expectedOutput);
+
+            // Clean up
+            File.Delete(filePath);
+        }
     }
 }
