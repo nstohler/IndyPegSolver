@@ -325,6 +325,79 @@ public class Board
         return hash;
     }
 
+    public List<PointRating> GeneratePointRatings()
+    {
+        var pointRatings = new List<PointRating>();
+
+        for (int i = 0; i < Width; i++)
+        {
+            for (int j = 0; j < Height; j++)
+            {
+                if (slots[i, j] == SlotState.Hole)
+                {
+                    var pointRating = new PointRating(new Point(i, j));
+                    //pointRating.AddFiller(new PegPlacement(new Point(i, j), SlotState.Left));
+                    AddFillers(pointRating);
+                    pointRatings.Add(pointRating);
+                }
+            }
+        }
+
+        return pointRatings;
+    }
+
+    private void AddFillers(PointRating pointRating)
+    {
+        Point holePosition = pointRating.HolePosition;
+
+        // Check for L turn fillers (directly adjacent)
+        int[,] lDirections = new int[,]
+        {
+        { -1, -1 }, { -1, 0 }, { -1, 1 },
+        { 0, -1 },           { 0, 1 },
+        { 1, -1 }, { 1, 0 }, { 1, 1 }
+        };
+
+        for (int i = 0; i < lDirections.GetLength(0); i++)
+        {
+            Point newPosition = new Point(holePosition.X + lDirections[i, 0], holePosition.Y + lDirections[i, 1]);
+
+            if (newPosition.X >= 0 && newPosition.X < Width && newPosition.Y >= 0 && newPosition.Y < Height)
+            {
+                SlotState currentState = slots[newPosition.X, newPosition.Y];
+                if (currentState != SlotState.Solid)
+                {
+                    pointRating.AddFiller(new PegPlacement(newPosition, SlotState.Left));
+                }
+            }
+        }
+
+        // Check for R turn fillers (horizontally and vertically)
+        int[,] rDirections = new int[,]
+        {
+        { 0, -1 }, { 0, 1 },
+        { -1, 0 }, { 1, 0 }
+        };
+
+        for (int i = 0; i < rDirections.GetLength(0); i++)
+        {
+            int dx = rDirections[i, 0];
+            int dy = rDirections[i, 1];
+            Point newPosition = new Point(holePosition.X + dx, holePosition.Y + dy);
+
+            while (newPosition.X >= 0 && newPosition.X < Width && newPosition.Y >= 0 && newPosition.Y < Height)
+            {
+                SlotState currentState = slots[newPosition.X, newPosition.Y];
+                if (currentState == SlotState.Solid)
+                {
+                    break;
+                }
+                pointRating.AddFiller(new PegPlacement(newPosition, SlotState.Right));
+                newPosition = new Point(newPosition.X + dx, newPosition.Y + dy);
+            }
+        }
+    }
+
     private SlotState CharToSlotState(char c)
     {
         return c switch
