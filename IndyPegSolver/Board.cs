@@ -145,29 +145,45 @@ public class Board
             throw new ArgumentException("Invalid peg state");
         }
 
-        if (GetSlotState(x, y) != SlotState.Hole)
+        if (GetSlotState(x, y) != SlotState.Hole && GetSlotState(x, y) != SlotState.Filled)
         {
-            throw new InvalidOperationException("Cannot place a peg in a non-hole slot");
+            throw new InvalidOperationException("Cannot place a peg in a non-hole or non-filled slot");
         }
 
-        SetSlotState(x, y, pegState);
-        FillAffectedSlots(x, y, pegState);
+        SetSlotState(x, y, pegState);        
+        if (pegState == SlotState.Left)  FillAffectedSlotsOnTurnLeft(x, y);
+        if (pegState == SlotState.Right) FillAffectedSlotsOnTurnright(x, y);
     }
 
-    private void FillAffectedSlots(int x, int y, SlotState pegState)
+    internal void FillAffectedSlotsOnTurnLeft(int x, int y)
     {
-        // Define the logic to fill affected slots based on the peg placement
-        // This is a placeholder implementation and should be replaced with actual rules
-        for (int i = 0; i < Width; i++)
+        // this is only for turn left so far
+        int[,] directions = new int[,]
         {
-            for (int j = 0; j < Height; j++)
+            { -1, -1 }, { -1, 0 }, { -1, 1 },
+            { 0, -1 },           { 0, 1 },
+            { 1, -1 }, { 1, 0 }, { 1, 1 }
+        };
+
+        for (int i = 0; i < directions.GetLength(0); i++)
+        {
+            int newX = x + directions[i, 0];
+            int newY = y + directions[i, 1];
+
+            if (newX >= 0 && newX < Width && newY >= 0 && newY < Height)
             {
-                if (slots[i, j] == SlotState.Hole)
+                SlotState currentState = slots[newX, newY];
+                if (currentState == SlotState.Hole || currentState == SlotState.Filled)
                 {
-                    slots[i, j] = SlotState.Filled;
+                    slots[newX, newY] = CombineSlotStates(currentState, SlotState.Filled);
                 }
             }
         }
+    }
+
+    internal void FillAffectedSlotsOnTurnright(int x, int y)
+    {
+        throw new NotImplementedException();
     }
 
     public void PrintBoard()

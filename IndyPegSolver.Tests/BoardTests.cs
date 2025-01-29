@@ -213,5 +213,236 @@ namespace IndyPegSolver.Tests
             // Act & Assert
             Should.Throw<InvalidOperationException>(() => board.CombineSlotStates(state1, state2));
         }
+
+        [Fact]
+        public void FillAffectedSlotsOnTurnLeft_ShouldUpdateBoardCorrectly()
+        {
+            // Arrange
+            char[,] initialState = {
+                { 'O', 'O', 'O', 'O' },
+                { 'O', 'O', '-', 'O' },
+                { 'O', 'O', '-', 'O' },
+                { '-', 'O', 'O', 'O' },
+                { '-', '-', 'O', 'O' },
+                { '-', 'O', 'O', '-' },
+                { '-', '-', 'O', '-' },
+                { '-', '-', 'O', '-' },
+                { 'O', 'O', 'O', 'O' }
+            };
+            Board board = new Board(initialState);
+
+            // Act
+            board.PlacePeg(1, 1, SlotState.Left); // Assuming this method calls FillAffectedSlotsOnTurnLeft internally
+
+            // Assert
+            // Add assertions to verify the board state after turning left
+            // Example assertions (these should be replaced with actual expected results):
+            board.GetSlotState(1, 1).ShouldBe(SlotState.Left);
+            board.GetSlotState(0, 0).ShouldBe(SlotState.Filled); 
+            board.GetSlotState(0, 1).ShouldBe(SlotState.Filled); 
+            board.GetSlotState(0, 2).ShouldBe(SlotState.Filled); 
+            board.GetSlotState(1, 0).ShouldBe(SlotState.Filled);            
+            board.GetSlotState(2, 0).ShouldBe(SlotState.Filled);
+            board.GetSlotState(2, 1).ShouldBe(SlotState.Filled);
+        }
+
+        [Fact]
+        public void FillAffectedSlotsOnTurnLeft_ShouldNotAffectSolidSlots()
+        {
+            // Arrange
+            char[,] initialState = {
+                { 'O', 'O', 'O', 'O' },
+                { 'O', 'O', '-', 'O' },
+                { 'O', 'O', '-', 'O' },
+                { '-', 'O', 'O', 'O' },
+                { '-', '-', 'O', 'O' },
+                { '-', 'O', 'O', '-' },
+                { '-', '-', 'O', '-' },
+                { '-', '-', 'O', '-' },
+                { 'O', 'O', 'O', 'O' }
+            };
+            Board board = new Board(initialState);
+
+            // Act
+            board.PlacePeg(1, 1, SlotState.Left); // Assuming this method calls FillAffectedSlotsOnTurnLeft internally
+
+            // Assert
+            // Add assertions to verify that solid slots are not affected
+            board.GetSlotState(2, 2).ShouldBe(SlotState.Solid);
+            board.GetSlotState(3, 0).ShouldBe(SlotState.Solid);
+        }
+
+        [Fact]
+        public void FillAffectedSlotsOnTurnLeft_ShouldThrowExceptionForInvalidPosition()
+        {
+            // Arrange
+            char[,] initialState = {
+                { 'O', 'O', 'O', 'O' },
+                { 'O', 'O', '-', 'O' },
+                { 'O', 'O', '-', 'O' },
+                { '-', 'O', 'O', 'O' },
+                { '-', '-', 'O', 'O' },
+                { '-', 'O', 'O', '-' },
+                { '-', '-', 'O', '-' },
+                { '-', '-', 'O', '-' },
+                { 'O', 'O', 'O', 'O' }
+            };
+            Board board = new Board(initialState);
+
+            // Act & Assert
+            Should.Throw<InvalidOperationException>(() => board.PlacePeg(2, 2, SlotState.Left)); // Assuming this method calls FillAffectedSlotsOnTurnLeft internally
+        }
+
+        [Theory]
+        [MemberData(nameof(GetFillAffectedSlotsOnTurnLeftTestData))]
+        public void FillAffectedSlotsOnTurnLeft_ShouldUpdateBoardCorrectlyExt(char[,] initialState, char[,] expectedState, int x, int y)
+        {
+            // Arrange
+            Board board = new Board(initialState);
+
+            // Act
+            board.PlacePeg(x, y, SlotState.Left);
+
+            // Assert
+            for (int i = 0; i < board.Width; i++)
+            {
+                for (int j = 0; j < board.Height; j++)
+                {
+                    board.GetSlotState(i, j).ShouldBe(CharToSlotState(expectedState[i, j]));
+                }
+            }
+        }
+
+        public static IEnumerable<object[]> GetFillAffectedSlotsOnTurnLeftTestData()
+        {
+            yield return new object[]
+            {
+                new char[,]
+                {
+                    { 'O', 'O', 'O' },
+                    { 'O', 'O', 'O' },
+                    { 'O', 'O', 'O' }
+                },
+                new char[,]
+                {
+                    { 'X', 'X', 'X' },
+                    { 'X', 'L', 'X' },
+                    { 'X', 'X', 'X' }
+                },
+                1, 1
+            };
+
+            yield return new object[]
+            {
+                new char[,]
+                {
+                    { 'O', 'O', 'O' },
+                    { 'O', 'O', 'O' },
+                    { 'O', 'O', 'O' }
+                },
+                new char[,]
+                {
+                    { 'L', 'X', 'O' },
+                    { 'X', 'X', 'O' },
+                    { 'O', 'O', 'O' }
+                },
+                0, 0
+            };
+
+            yield return new object[]
+            {
+                new char[,]
+                {
+                    { 'O', 'O', 'O' },
+                    { 'O', 'O', 'O' },
+                    { 'O', 'O', 'O' }
+                },
+                new char[,]
+                {
+                    { 'O', 'X', 'L' },
+                    { 'O', 'X', 'X' },
+                    { 'O', 'O', 'O' }
+                },
+                0, 2
+            };
+
+            yield return new object[]
+            {
+                new char[,]
+                {
+                    { 'O', 'O', 'O' },
+                    { 'O', 'O', 'O' },
+                    { 'O', 'O', 'O' }
+                },
+                new char[,]
+                {
+                    { 'O', 'O', 'O' },
+                    { 'X', 'X', 'O' },
+                    { 'L', 'X', 'O' }
+                },
+                2, 0
+            };
+
+            yield return new object[]
+            {
+                new char[,]
+                {
+                    { 'O', 'O', 'O' },
+                    { 'O', 'O', 'O' },
+                    { 'O', 'O', 'O' }
+                },
+                new char[,]
+                {
+                    { 'O', 'O', 'O' },
+                    { 'O', 'X', 'X' },
+                    { 'O', 'X', 'L' }
+                },
+                2, 2
+            };
+
+            yield return new object[]
+            {
+                new char[,]
+                {
+                    { 'O', 'O', 'O', 'O' },
+                    { 'O', 'O', '-', 'O' },
+                    { 'O', 'O', '-', 'O' },
+                    { '-', 'O', 'O', 'O' },
+                    { '-', '-', 'O', 'O' },
+                    { '-', 'O', 'O', '-' },
+                    { '-', '-', 'O', '-' },
+                    { '-', '-', 'O', '-' },
+                    { 'O', 'O', 'O', 'O' }
+                },
+                new char[,]
+                {
+                    { 'X', 'X', 'X', 'O' },
+                    { 'X', 'L', '-', 'O' },
+                    { 'X', 'X', '-', 'O' },
+                    { '-', 'O', 'O', 'O' },
+                    { '-', '-', 'O', 'O' },
+                    { '-', 'O', 'O', '-' },
+                    { '-', '-', 'O', '-' },
+                    { '-', '-', 'O', '-' },
+                    { 'O', 'O', 'O', 'O' }
+                },
+                1, 1
+            };
+
+            // Add more test cases as needed
+        }
+
+        private SlotState CharToSlotState(char c)
+        {
+            return c switch
+            {
+                '-' => SlotState.Solid,
+                'O' => SlotState.Hole,
+                'L' => SlotState.Left,
+                'R' => SlotState.Right,
+                'X' => SlotState.Filled,
+                _ => throw new ArgumentException("Invalid character for slot state")
+            };
+        }
     }
 }
