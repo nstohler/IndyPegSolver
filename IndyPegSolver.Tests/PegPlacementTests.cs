@@ -65,7 +65,7 @@ namespace IndyPegSolver.Tests
             string result = pegPlacement.ToString();
 
             // Assert
-            Assert.Equal("PegPlacement(Position: (5, 10), State: Left)", result);
+            Assert.Equal("5-10-L", result);
         }
 
         [Fact]

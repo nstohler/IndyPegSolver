@@ -35,7 +35,7 @@ public struct PegPlacement : IComparable<PegPlacement>
 
     public override string ToString()
     {
-        return $"PegPlacement(Position: {Position}, State: {State})";
+        return $"{Position.X}-{Position.Y}-{(State == SlotState.Left ? "L" : "R")}";
     }
 
     public int CompareTo(PegPlacement other)
