@@ -54,22 +54,22 @@ public class Board
     public int Width { get; }
     public int Height { get; }
 
-    public SlotState GetSlotState(int x, int y)
+    public SlotState GetSlotState(Point position)
     {
-        if (x < 0 || x >= Width || y < 0 || y >= Height)
+        if (position.X < 0 || position.X >= Width || position.Y < 0 || position.Y >= Height)
         {
             return SlotState.Solid; // Treat out-of-bounds as Solid
         }
-        return slots[x, y];
+        return slots[position.X, position.Y];
     }
 
-    public void SetSlotState(int x, int y, SlotState state)
+    public void SetSlotState(Point position, SlotState state)
     {
-        if (x < 0 || x >= Width || y < 0 || y >= Height)
+        if (position.X < 0 || position.X >= Width || position.Y < 0 || position.Y >= Height)
         {
             throw new ArgumentException("Position out of bounds");
         }
-        slots[x, y] = state;
+        slots[position.X, position.Y] = state;
     }
 
     public bool IsSolved()
@@ -152,24 +152,24 @@ public class Board
         throw new InvalidOperationException("Invalid combination of slot states");
     }
 
-    public void PlacePeg(int x, int y, SlotState pegState)
+    public void PlacePeg(Point position, SlotState pegState)
     {
         if (pegState != SlotState.Left && pegState != SlotState.Right)
         {
             throw new ArgumentException("Invalid peg state");
         }
 
-        if (GetSlotState(x, y) != SlotState.Hole && GetSlotState(x, y) != SlotState.Filled)
+        if (GetSlotState(position) != SlotState.Hole && GetSlotState(position) != SlotState.Filled)
         {
             throw new InvalidOperationException("Cannot place a peg in a non-hole or non-filled slot");
         }
 
-        SetSlotState(x, y, pegState);        
-        if (pegState == SlotState.Left)  FillAffectedSlotsOnTurnLeft(x, y);
-        if (pegState == SlotState.Right) FillAffectedSlotsOnTurnRight(x, y);
+        SetSlotState(position, pegState);        
+        if (pegState == SlotState.Left)  FillAffectedSlotsOnTurnLeft(position);
+        if (pegState == SlotState.Right) FillAffectedSlotsOnTurnRight(position);
     }
 
-    private void FillAffectedSlotsOnTurnLeft(int x, int y)
+    private void FillAffectedSlotsOnTurnLeft(Point position)
     {
         // this is only for turn left so far
         int[,] directions = new int[,]
@@ -181,8 +181,8 @@ public class Board
 
         for (int i = 0; i < directions.GetLength(0); i++)
         {
-            int newX = x + directions[i, 0];
-            int newY = y + directions[i, 1];
+            int newX = position.X + directions[i, 0];
+            int newY = position.Y + directions[i, 1];
 
             if (newX >= 0 && newX < Width && newY >= 0 && newY < Height)
             {
@@ -195,7 +195,31 @@ public class Board
         }
     }
 
-    private void FillAffectedSlotsOnTurnRight(int x, int y)
+    //private void FillAffectedSlotsOnTurnLeft(Point position)
+    //{
+    //    int[,] directions = new int[,]
+    //    {
+    //        { -1, -1 }, { -1, 0 }, { -1, 1 },
+    //        { 0, -1 },           { 0, 1 },
+    //        { 1, -1 }, { 1, 0 }, { 1, 1 }
+    //    };
+
+    //    for (int i = 0; i < directions.GetLength(0); i++)
+    //    {
+    //        Point newPosition = new Point(position.X + directions[i, 0], position.Y + directions[i, 1]);
+
+    //        if (newPosition.X >= 0 && newPosition.X < Width && newPosition.Y >= 0 && newPosition.Y < Height)
+    //        {
+    //            SlotState currentState = slots[newPosition.X, newPosition.Y];
+    //            if (currentState == SlotState.Hole || currentState == SlotState.Filled)
+    //            {
+    //                slots[newPosition.X, newPosition.Y] = CombineSlotStates(currentState, SlotState.Filled);
+    //            }
+    //        }
+    //    }
+    //}
+
+    private void FillAffectedSlotsOnTurnRight(Point position)
     {
         // Directions for horizontal and vertical movement
         int[,] directions = new int[,]
@@ -206,8 +230,8 @@ public class Board
 
         for (int i = 0; i < directions.GetLength(0); i++)
         {
-            int newX = x;
-            int newY = y;
+            int newX = position.X;
+            int newY = position.Y;
 
             while (true)
             {
@@ -231,8 +255,8 @@ public class Board
                 }
             }
         }
-    }    
-
+    }
+    
     public void PrintBoard()
     {
         for (int i = 0; i < Width; i++)

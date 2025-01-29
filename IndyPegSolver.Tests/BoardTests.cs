@@ -27,8 +27,8 @@ namespace IndyPegSolver.Tests
             // Assert
             board.Width.ShouldBe(9);
             board.Height.ShouldBe(4);
-            board.GetSlotState(0, 0).ShouldBe(SlotState.Hole);
-            board.GetSlotState(2, 2).ShouldBe(SlotState.Solid);
+            board.GetSlotState(new Point(0, 0)).ShouldBe(SlotState.Hole);
+            board.GetSlotState(new Point(2, 2)).ShouldBe(SlotState.Solid);
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace IndyPegSolver.Tests
             {
                 for (int j = 0; j < board.Height; j++)
                 {
-                    clonedBoard.GetSlotState(i, j).ShouldBe(board.GetSlotState(i, j));
+                    clonedBoard.GetSlotState(new Point(i, j)).ShouldBe(board.GetSlotState(new Point(i, j)));
                 }
             }
         }
@@ -68,10 +68,10 @@ namespace IndyPegSolver.Tests
         {
             // Arrange
             var board = new Board(5, 5);
-            board.SetSlotState(1, 1, SlotState.Hole);
-            board.SetSlotState(2, 2, SlotState.Left);
-            board.SetSlotState(3, 3, SlotState.Right);
-            board.SetSlotState(4, 4, SlotState.Filled);
+            board.SetSlotState(new Point(1, 1), SlotState.Hole);
+            board.SetSlotState(new Point(2, 2), SlotState.Left);
+            board.SetSlotState(new Point(3, 3), SlotState.Right);
+            board.SetSlotState(new Point(4, 4), SlotState.Filled);
 
             // Act
             board.Clear();
@@ -81,9 +81,9 @@ namespace IndyPegSolver.Tests
             {
                 for (int j = 0; j < board.Height; j++)
                 {
-                    if (board.GetSlotState(i, j) != SlotState.Solid)
+                    if (board.GetSlotState(new Point(i, j)) != SlotState.Solid)
                     {
-                        Assert.Equal(SlotState.Hole, board.GetSlotState(i, j));
+                        Assert.Equal(SlotState.Hole, board.GetSlotState(new Point(i, j)));
                     }
                 }
             }
@@ -96,10 +96,10 @@ namespace IndyPegSolver.Tests
             Board board = new Board(5, 5);
 
             // Act
-            board.SetSlotState(2, 2, SlotState.Hole);
+            board.SetSlotState(new Point(2, 2), SlotState.Hole);
 
             // Assert
-            board.GetSlotState(2, 2).ShouldBe(SlotState.Hole);
+            board.GetSlotState(new Point(2, 2)).ShouldBe(SlotState.Hole);
         }
 
         [Fact]
@@ -214,7 +214,7 @@ namespace IndyPegSolver.Tests
             {
                 for (int j = 0; j < combinedBoard.Height; j++)
                 {
-                    combinedBoard.GetSlotState(i, j).ShouldBe(board2.GetSlotState(i, j));
+                    combinedBoard.GetSlotState(new Point(i, j)).ShouldBe(board2.GetSlotState(new Point(i, j)));
                 }
             }
         }
@@ -237,10 +237,10 @@ namespace IndyPegSolver.Tests
             Board board = new Board(initialState);
 
             // Act
-            board.PlacePeg(0, 0, SlotState.Left);
+            board.PlacePeg(new Point(0, 0), SlotState.Left);
 
             // Assert
-            board.GetSlotState(0, 0).ShouldBe(SlotState.Left);
+            board.GetSlotState(new Point(0, 0)).ShouldBe(SlotState.Left);
             // Additional assertions can be added here to verify the effect of placing the peg
         }
 
@@ -309,18 +309,18 @@ namespace IndyPegSolver.Tests
             Board board = new Board(initialState);
 
             // Act
-            board.PlacePeg(1, 1, SlotState.Left); // Assuming this method calls FillAffectedSlotsOnTurnLeft internally
+            board.PlacePeg(new Point(1, 1), SlotState.Left); // Assuming this method calls FillAffectedSlotsOnTurnLeft internally
 
             // Assert
             // Add assertions to verify the board state after turning left
             // Example assertions (these should be replaced with actual expected results):
-            board.GetSlotState(1, 1).ShouldBe(SlotState.Left);
-            board.GetSlotState(0, 0).ShouldBe(SlotState.Filled); 
-            board.GetSlotState(0, 1).ShouldBe(SlotState.Filled); 
-            board.GetSlotState(0, 2).ShouldBe(SlotState.Filled); 
-            board.GetSlotState(1, 0).ShouldBe(SlotState.Filled);            
-            board.GetSlotState(2, 0).ShouldBe(SlotState.Filled);
-            board.GetSlotState(2, 1).ShouldBe(SlotState.Filled);
+            board.GetSlotState(new Point(1, 1)).ShouldBe(SlotState.Left);
+            board.GetSlotState(new Point(0, 0)).ShouldBe(SlotState.Filled); 
+            board.GetSlotState(new Point(0, 1)).ShouldBe(SlotState.Filled); 
+            board.GetSlotState(new Point(0, 2)).ShouldBe(SlotState.Filled); 
+            board.GetSlotState(new Point(1, 0)).ShouldBe(SlotState.Filled);            
+            board.GetSlotState(new Point(2, 0)).ShouldBe(SlotState.Filled);
+            board.GetSlotState(new Point(2, 1)).ShouldBe(SlotState.Filled);
         }
 
         [Fact]
@@ -341,12 +341,12 @@ namespace IndyPegSolver.Tests
             Board board = new Board(initialState);
 
             // Act
-            board.PlacePeg(1, 1, SlotState.Left); // Assuming this method calls FillAffectedSlotsOnTurnLeft internally
+            board.PlacePeg(new Point(1, 1), SlotState.Left); // Assuming this method calls FillAffectedSlotsOnTurnLeft internally
 
             // Assert
             // Add assertions to verify that solid slots are not affected
-            board.GetSlotState(2, 2).ShouldBe(SlotState.Solid);
-            board.GetSlotState(3, 0).ShouldBe(SlotState.Solid);
+            board.GetSlotState(new Point(2, 2)).ShouldBe(SlotState.Solid);
+            board.GetSlotState(new Point(3, 0)).ShouldBe(SlotState.Solid);
         }
 
         [Fact]
@@ -367,7 +367,7 @@ namespace IndyPegSolver.Tests
             Board board = new Board(initialState);
 
             // Act & Assert
-            Should.Throw<InvalidOperationException>(() => board.PlacePeg(2, 2, SlotState.Left)); // Assuming this method calls FillAffectedSlotsOnTurnLeft internally
+            Should.Throw<InvalidOperationException>(() => board.PlacePeg(new Point(2, 2), SlotState.Left)); // Assuming this method calls FillAffectedSlotsOnTurnLeft internally
         }
 
         [Theory]
@@ -378,14 +378,14 @@ namespace IndyPegSolver.Tests
             Board board = new Board(initialState);
 
             // Act
-            board.PlacePeg(x, y, SlotState.Left);
+            board.PlacePeg(new Point(x, y), SlotState.Left);
 
             // Assert
             for (int i = 0; i < board.Width; i++)
             {
                 for (int j = 0; j < board.Height; j++)
                 {
-                    board.GetSlotState(i, j).ShouldBe(CharToSlotState(expectedState[i, j]));
+                    board.GetSlotState(new Point(i, j)).ShouldBe(CharToSlotState(expectedState[i, j]));
                 }
             }
         }
@@ -517,14 +517,14 @@ namespace IndyPegSolver.Tests
             Board board = new Board(initialState);
 
             // Act
-            board.PlacePeg(x, y, SlotState.Right);
+            board.PlacePeg(new Point(x, y), SlotState.Right);
 
             // Assert
             for (int i = 0; i < board.Width; i++)
             {
                 for (int j = 0; j < board.Height; j++)
                 {
-                    board.GetSlotState(i, j).ShouldBe(CharToSlotState(expectedState[i, j]));
+                    board.GetSlotState(new Point(i, j)).ShouldBe(CharToSlotState(expectedState[i, j]));
                 }
             }
         }
@@ -535,11 +535,11 @@ namespace IndyPegSolver.Tests
             {
                 new char[,]
                 {
-                    { 'O', 'O', 'O', 'O', 'O', 'O' }                    
+                    { 'O', 'O', 'O', 'O', 'O', 'O' }
                 },
                 new char[,]
                 {
-                    { 'X', 'R', 'X', 'X', 'X', 'X' }                    
+                    { 'X', 'R', 'X', 'X', 'X', 'X' }
                 },
                 0, 1
             };
