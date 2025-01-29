@@ -18,12 +18,12 @@ public class Board
         Height = height;
         slots = new SlotState[width, height];
 
-        // Initialize the board with Solid state
+        // Initialize the board with Hole state
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
-                slots[i, j] = SlotState.Solid;
+                slots[i, j] = SlotState.Hole;
             }
         }
     }
@@ -63,7 +63,7 @@ public class Board
         return slots[position.X, position.Y];
     }
 
-    public void SetSlotState(Point position, SlotState state)
+    private void SetSlotState(Point position, SlotState state)
     {
         if (position.X < 0 || position.X >= Width || position.Y < 0 || position.Y >= Height)
         {
@@ -194,30 +194,6 @@ public class Board
             }
         }
     }
-
-    //private void FillAffectedSlotsOnTurnLeft(Point position)
-    //{
-    //    int[,] directions = new int[,]
-    //    {
-    //        { -1, -1 }, { -1, 0 }, { -1, 1 },
-    //        { 0, -1 },           { 0, 1 },
-    //        { 1, -1 }, { 1, 0 }, { 1, 1 }
-    //    };
-
-    //    for (int i = 0; i < directions.GetLength(0); i++)
-    //    {
-    //        Point newPosition = new Point(position.X + directions[i, 0], position.Y + directions[i, 1]);
-
-    //        if (newPosition.X >= 0 && newPosition.X < Width && newPosition.Y >= 0 && newPosition.Y < Height)
-    //        {
-    //            SlotState currentState = slots[newPosition.X, newPosition.Y];
-    //            if (currentState == SlotState.Hole || currentState == SlotState.Filled)
-    //            {
-    //                slots[newPosition.X, newPosition.Y] = CombineSlotStates(currentState, SlotState.Filled);
-    //            }
-    //        }
-    //    }
-    //}
 
     private void FillAffectedSlotsOnTurnRight(Point position)
     {
