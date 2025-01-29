@@ -855,5 +855,53 @@ namespace IndyPegSolver.Tests
             // Clean up
             File.Delete(filePath);
         }
+
+        [Fact]
+        public void Board_Equals_ShouldReturnTrue_ForEqualBoards()
+        {
+            // Arrange
+            var board1 = new Board(5, 5);
+            var board2 = new Board(5, 5);
+
+            // Act & Assert
+            Assert.Equal(board1, board2);
+            Assert.True(board1.Equals(board2));
+        }
+
+        [Fact]
+        public void Board_Equals_ShouldReturnFalse_ForDifferentBoards()
+        {
+            // Arrange
+            var board1 = new Board(5, 5);
+            var board2 = new Board(5, 5);
+            board2.PlacePeg(new Point(2, 2), SlotState.Left);
+
+            // Act & Assert
+            Assert.NotEqual(board1, board2);
+            Assert.False(board1.Equals(board2));
+        }
+
+        [Fact]
+        public void Board_GetHashCode_ShouldReturnSameHashCode_ForEqualBoards()
+        {
+            // Arrange
+            var board1 = new Board(5, 5);
+            var board2 = new Board(5, 5);
+
+            // Act & Assert
+            Assert.Equal(board1.GetHashCode(), board2.GetHashCode());
+        }
+
+        [Fact]
+        public void Board_GetHashCode_ShouldReturnDifferentHashCode_ForDifferentBoards()
+        {
+            // Arrange
+            var board1 = new Board(5, 5);
+            var board2 = new Board(5, 5);
+            board2.PlacePeg(new Point(2, 2), SlotState.Right);
+
+            // Act & Assert
+            Assert.NotEqual(board1.GetHashCode(), board2.GetHashCode());
+        }
     }
 }

@@ -6,6 +6,9 @@ public class Board
 {
     private const int MaxSize = 15;
     private SlotState[,] slots;
+    
+    public int Width { get; }
+    public int Height { get; }
 
     public Board(int width, int height)
     {
@@ -50,10 +53,7 @@ public class Board
             }
         }
     }
-
-    public int Width { get; }
-    public int Height { get; }
-
+    
     public SlotState GetSlotState(Point position)
     {
         if (position.X < 0 || position.X >= Width || position.Y < 0 || position.Y >= Height)
@@ -285,6 +285,44 @@ public class Board
                 }
             }
         }
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is Board other)
+        {
+            if (Width != other.Width || Height != other.Height)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < Width; i++)
+            {
+                for (int j = 0; j < Height; j++)
+                {
+                    if (slots[i, j] != other.slots[i, j])
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        int hash = HashCode.Combine(Width, Height);
+        for (int i = 0; i < Width; i++)
+        {
+            for (int j = 0; j < Height; j++)
+            {
+                hash = HashCode.Combine(hash, slots[i, j]);
+            }
+        }
+        return hash;
     }
 
     private SlotState CharToSlotState(char c)

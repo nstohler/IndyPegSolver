@@ -14,7 +14,7 @@ public struct Point : IComparable<Point>
         return new Point(X, Y);
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is Point other)
         {

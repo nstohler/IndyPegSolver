@@ -19,7 +19,7 @@ public struct PegPlacement : IComparable<PegPlacement>
         return new PegPlacement(Position.Copy(), State);
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is PegPlacement other)
         {

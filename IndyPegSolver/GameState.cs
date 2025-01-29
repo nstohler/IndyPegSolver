@@ -5,8 +5,7 @@ public class GameState
     public List<PegPlacement> PegPlacements { get; }
     public Board InitialBoard { get; }
     public Board CurrentBoard { get; private set; }
-    public int PegCount { get; private set; }
-    public int UnfilledHolesCount { get; private set; }
+    public BoardRating Rating { get; private set; }
 
     public GameState(Board initialBoard)
     {
@@ -20,47 +19,30 @@ public class GameState
     {
         PegPlacements.Add(pegPlacement);
         CurrentBoard.PlacePeg(pegPlacement.Position, pegPlacement.State);
-        //CurrentBoard.SetSlotState(pegPlacement.Position, pegPlacement.State);
-        //if (pegPlacement.State == SlotState.Left)
-        //{
-        //    CurrentBoard.FillAffectedSlotsOnTurnLeft(pegPlacement.Position);
-        //}
-        //else if (pegPlacement.State == SlotState.Right)
-        //{
-        //    CurrentBoard.FillAffectedSlotsOnTurnRight(pegPlacement.Position);
-        //}
         UpdateRating();
     }
 
-    public void RemovePegPlacement(PegPlacement pegPlacement)
+    public void RemovePegPlacement(PegPlacement pegPlacementToRemove)
     {
-        PegPlacements.Remove(pegPlacement);
+        PegPlacements.Remove(pegPlacementToRemove);
         // Rebuild the board state from the initial board
         CurrentBoard = InitialBoard.Clone();
         foreach (var placement in PegPlacements)
         {
-            CurrentBoard.PlacePeg(pegPlacement.Position, pegPlacement.State);
-            //CurrentBoard.SetSlotState(placement.Position, placement.State);
-            //if (placement.State == SlotState.Left)
-            //{
-            //    CurrentBoard.FillAffectedSlotsOnTurnLeft(placement.Position);
-            //}
-            //else if (placement.State == SlotState.Right)
-            //{
-            //    CurrentBoard.FillAffectedSlotsOnTurnRight(placement.Position);
-            //}
+            CurrentBoard.PlacePeg(placement.Position, placement.State);
         }
         UpdateRating();
     }
 
     private void UpdateRating()
     {
-        PegCount = PegPlacements.Count;
-        UnfilledHolesCount = CurrentBoard.CountUnfilledHoles();
+        int pegCount = PegPlacements.Count;
+        int unfilledHolesCount = CurrentBoard.CountUnfilledHoles();
+        Rating = new BoardRating(pegCount, unfilledHolesCount);
     }
 
     public override string ToString()
     {
-        return $"GameState(PegCount: {PegCount}, UnfilledHolesCount: {UnfilledHolesCount})";
+        return $"GameState(Rating: {Rating})";
     }
 }
