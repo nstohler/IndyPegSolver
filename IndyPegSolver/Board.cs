@@ -152,7 +152,7 @@ public class Board
 
         SetSlotState(x, y, pegState);        
         if (pegState == SlotState.Left)  FillAffectedSlotsOnTurnLeft(x, y);
-        if (pegState == SlotState.Right) FillAffectedSlotsOnTurnright(x, y);
+        if (pegState == SlotState.Right) FillAffectedSlotsOnTurnRight(x, y);
     }
 
     internal void FillAffectedSlotsOnTurnLeft(int x, int y)
@@ -181,10 +181,43 @@ public class Board
         }
     }
 
-    internal void FillAffectedSlotsOnTurnright(int x, int y)
+    internal void FillAffectedSlotsOnTurnRight(int x, int y)
     {
-        throw new NotImplementedException();
-    }
+        // Directions for horizontal and vertical movement
+        int[,] directions = new int[,]
+        {
+            { -1, 0 }, { 1, 0 }, // Vertical directions
+            { 0, -1 }, { 0, 1 }  // Horizontal directions
+        };
+
+        for (int i = 0; i < directions.GetLength(0); i++)
+        {
+            int newX = x;
+            int newY = y;
+
+            while (true)
+            {
+                newX += directions[i, 0];
+                newY += directions[i, 1];
+
+                if (newX < 0 || newX >= Width || newY < 0 || newY >= Height)
+                {
+                    break; // Out of bounds
+                }
+
+                SlotState currentState = slots[newX, newY];
+                if (currentState == SlotState.Solid)
+                {
+                    break; // Blocked by a solid spot
+                }
+
+                if (currentState == SlotState.Hole || currentState == SlotState.Filled)
+                {
+                    slots[newX, newY] = CombineSlotStates(currentState, SlotState.Filled);
+                }
+            }
+        }
+    }    
 
     public void PrintBoard()
     {

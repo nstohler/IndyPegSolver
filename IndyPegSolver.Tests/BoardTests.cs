@@ -432,6 +432,220 @@ namespace IndyPegSolver.Tests
             // Add more test cases as needed
         }
 
+        [Theory]
+        [MemberData(nameof(GetFillAffectedSlotsOnTurnRightTestData))]
+        public void FillAffectedSlotsOnTurnRight_ShouldUpdateBoardCorrectly(char[,] initialState, char[,] expectedState, int x, int y)
+        {
+            // Arrange
+            Board board = new Board(initialState);
+
+            // Act
+            board.PlacePeg(x, y, SlotState.Right);
+
+            // Assert
+            for (int i = 0; i < board.Width; i++)
+            {
+                for (int j = 0; j < board.Height; j++)
+                {
+                    board.GetSlotState(i, j).ShouldBe(CharToSlotState(expectedState[i, j]));
+                }
+            }
+        }
+
+        public static IEnumerable<object[]> GetFillAffectedSlotsOnTurnRightTestData()
+        {
+            yield return new object[]
+            {
+                new char[,]
+                {
+                    { 'O', 'O', 'O', 'O', 'O', 'O' }                    
+                },
+                new char[,]
+                {
+                    { 'X', 'R', 'X', 'X', 'X', 'X' }                    
+                },
+                0, 1
+            };
+
+            yield return new object[]
+            {
+                new char[,]
+                {
+                    { 'O', '-', 'O', 'O', 'O', '-', 'O' }
+                },
+                new char[,]
+                {
+                    { 'O', '-', 'X', 'R', 'X', '-', 'O' }
+                },
+                0, 3
+            };
+
+            yield return new object[]
+            {
+                new char[,]
+                {
+                    { 'O' },
+                    { '-' },
+                    { 'O' },
+                    { 'O' },
+                    { 'O' }
+                },
+                new char[,]
+                {
+                    { 'O' },
+                    { '-' },
+                    { 'X' },
+                    { 'R' },
+                    { 'X' }
+                },
+                3, 0
+            };
+
+            yield return new object[]
+            {
+                new char[,]
+                {
+                    { 'O' },
+                    { 'O' },
+                    { 'O' },
+                    { '-' },
+                    { 'O' }
+                },
+                new char[,]
+                {
+                    { 'X' },
+                    { 'R' },
+                    { 'X' },
+                    { '-' },
+                    { 'O' }
+                },
+                1, 0
+            };
+
+            yield return new object[]
+            {
+                new char[,]
+                {
+                    { 'O', 'O', 'O' },
+                    { 'O', 'O', 'O' },
+                    { 'O', 'O', 'O' }
+                },
+                new char[,]
+                {
+                    { 'R', 'X', 'X' },
+                    { 'X', 'O', 'O' },
+                    { 'X', 'O', 'O' },
+                },
+                0, 0
+            };
+
+            yield return new object[]
+            {
+                new char[,]
+                {
+                    { 'O', 'X', 'L' },
+                    { 'O', 'X', 'X' },
+                    { '-', 'O', 'O' }
+                },
+                new char[,]
+                {
+                    { 'R', 'X', 'L' },
+                    { 'X', 'X', 'X' },
+                    { '-', 'O', 'O' },
+                },
+                0, 0
+            };
+
+            yield return new object[]
+            {
+                new char[,]
+                {
+                    { 'O', 'O', 'O', 'O' },
+                    { 'O', 'O', '-', 'O' },
+                    { 'O', 'O', '-', 'O' },
+                    { '-', 'O', 'O', 'O' },
+                    { '-', '-', 'O', 'O' },
+                    { '-', 'O', 'O', '-' },
+                    { '-', '-', 'O', '-' },
+                    { '-', '-', 'O', '-' },
+                    { 'O', 'O', 'O', 'O' }
+                },
+                new char[,]
+                {
+                    { 'O', 'X', 'O', 'O' },
+                    { 'X', 'R', '-', 'O' },
+                    { 'O', 'X', '-', 'O' },
+                    { '-', 'X', 'O', 'O' },
+                    { '-', '-', 'O', 'O' },
+                    { '-', 'O', 'O', '-' },
+                    { '-', '-', 'O', '-' },
+                    { '-', '-', 'O', '-' },
+                    { 'O', 'O', 'O', 'O' }
+                },
+                1, 1
+            };
+
+            yield return new object[]
+            {
+                new char[,]
+                {
+                    { 'O', 'O', 'O', 'O' },
+                    { 'O', 'O', '-', 'O' },
+                    { 'O', 'O', 'O', 'O' },
+                    { '-', 'O', 'O', 'O' },
+                    { '-', '-', 'O', 'O' },
+                    { '-', 'O', 'O', '-' },
+                    { '-', '-', 'O', '-' },
+                    { '-', '-', 'O', '-' },
+                    { 'O', 'O', 'O', 'O' }
+                },
+                new char[,]
+                {
+                    { 'O', 'O', 'O', 'O' },
+                    { 'O', 'O', '-', 'O' },
+                    { 'O', 'O', 'X', 'O' },
+                    { '-', 'X', 'R', 'X' },
+                    { '-', '-', 'X', 'O' },
+                    { '-', 'O', 'X', '-' },
+                    { '-', '-', 'X', '-' },
+                    { '-', '-', 'X', '-' },
+                    { 'O', 'O', 'X', 'O' }
+                },
+                3, 2
+            };
+
+            yield return new object[]
+            {
+                new char[,]
+                {
+                    { 'O', 'O', 'O', 'O' },
+                    { 'O', 'X', 'X', 'X' },
+                    { 'O', 'X', 'L', 'X' },
+                    { '-', 'X', 'X', 'X' },
+                    { '-', '-', 'O', 'O' },
+                    { '-', 'O', 'O', '-' },
+                    { '-', '-', 'O', '-' },
+                    { '-', '-', 'O', '-' },
+                    { 'O', 'O', 'O', 'O' }
+                },
+                new char[,]
+                {
+                    { 'O', 'O', 'X', 'O' },
+                    { 'O', 'X', 'X', 'X' },
+                    { 'O', 'X', 'L', 'X' },
+                    { '-', 'X', 'X', 'X' },
+                    { '-', '-', 'X', 'O' },
+                    { '-', 'O', 'X', '-' },
+                    { '-', '-', 'X', '-' },
+                    { '-', '-', 'X', '-' },
+                    { 'X', 'X', 'R', 'X' }
+                },
+                8, 2
+            };
+
+            // Add more test cases as needed
+        }
+
         private SlotState CharToSlotState(char c)
         {
             return c switch
