@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using Shouldly;
+using Xunit;
 
 namespace IndyPegSolver.Tests
 {
@@ -15,8 +16,8 @@ namespace IndyPegSolver.Tests
             BoardRating rating = new BoardRating(pegCount, unfilledHolesCount);
 
             // Assert
-            Assert.Equal(pegCount, rating.PegCount);
-            Assert.Equal(unfilledHolesCount, rating.UnfilledHolesCount);
+            rating.PegCount.ShouldBe(pegCount);
+            rating.UnfilledHolesCount.ShouldBe(unfilledHolesCount);
         }
 
         [Fact]
@@ -29,7 +30,7 @@ namespace IndyPegSolver.Tests
             string result = rating.ToString();
 
             // Assert
-            Assert.Equal("[5-10]", result);
+            result.ShouldBe("[5-10]");
         }
 
         [Fact]
@@ -40,8 +41,8 @@ namespace IndyPegSolver.Tests
             BoardRating rating2 = new BoardRating(5, 10);
 
             // Act & Assert
-            Assert.Equal(rating1, rating2);
-            Assert.True(rating1.Equals(rating2));
+            rating1.ShouldBe(rating2);
+            rating1.Equals(rating2).ShouldBeTrue();
         }
 
         [Fact]
@@ -52,8 +53,8 @@ namespace IndyPegSolver.Tests
             BoardRating rating2 = new BoardRating(10, 5);
 
             // Act & Assert
-            Assert.NotEqual(rating1, rating2);
-            Assert.False(rating1.Equals(rating2));
+            rating1.ShouldNotBe(rating2);
+            rating1.Equals(rating2).ShouldBeFalse();
         }
 
         [Fact]
@@ -64,7 +65,7 @@ namespace IndyPegSolver.Tests
             BoardRating rating2 = new BoardRating(5, 10);
 
             // Act & Assert
-            Assert.Equal(rating1.GetHashCode(), rating2.GetHashCode());
+            rating1.GetHashCode().ShouldBe(rating2.GetHashCode());
         }
     }
 }

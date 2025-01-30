@@ -3,7 +3,7 @@
 public struct PegPlacementRating
 {
     public PegPlacement PegPlacement { get; }
-    public List<Point> FilledPoints { get; }
+    public List<Point> FilledPoints { get; } // TODO: sorting? 
     
     public int Rating => FilledPoints.Count;
 
