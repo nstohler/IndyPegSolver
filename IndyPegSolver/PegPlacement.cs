@@ -38,6 +38,23 @@ public struct PegPlacement : IComparable<PegPlacement>
         return $"{Position.X}-{Position.Y}-{(State == SlotState.Left ? "L" : "R")}";
     }
 
+    public static PegPlacement FromString(string placementString)
+    {
+        var parts = placementString.Split('-');
+        if (parts.Length != 3 || !int.TryParse(parts[0], out int x) || !int.TryParse(parts[1], out int y))
+        {
+            throw new ArgumentException("Invalid peg placement string format");
+        }
+        var position = new Point(x, y);
+        var state = parts[2] switch
+        {
+            "L" => SlotState.Left,
+            "R" => SlotState.Right,
+            _ => throw new ArgumentException("Invalid peg state in string")
+        };
+        return new PegPlacement(position, state);
+    }
+
     public int CompareTo(PegPlacement other)
     {
         // Explicitly compare SlotState values: Right comes before Left

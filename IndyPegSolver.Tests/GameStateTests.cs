@@ -162,6 +162,47 @@ namespace IndyPegSolver.Tests
             gameState.Rating.ToString().ShouldBe("[4-0]");
         }
 
+        [Fact]
+        public void GetPegPlacementInOrderString_ShouldReturnCorrectString()
+        {
+            // Arrange
+            var initialBoard = new Board(5, 5);
+            var gameState = new GameState(initialBoard);
+            var pegPlacement1 = new PegPlacement(new Point(3, 3), SlotState.Right);
+            var pegPlacement2 = new PegPlacement(new Point(2, 2), SlotState.Left);
+            gameState.AddPegPlacement(pegPlacement1);
+            gameState.AddPegPlacement(pegPlacement2);
+
+            // Act
+            string result = gameState.GetPegPlacementInOrderString();
+
+            // Assert
+            result.ShouldBe("3-3-R|2-2-L");
+        }
+
+        [Theory]
+        [InlineData("2-2-L|3-3-R", 2, 2, SlotState.Left, 3, 3, SlotState.Right)]
+        [InlineData("1-1-L|4-4-R", 1, 1, SlotState.Left, 4, 4, SlotState.Right)]
+        [InlineData("0-0-L|2-2-R", 0, 0, SlotState.Left, 2, 2, SlotState.Right)]
+        public void SetPegPlacementsFromString_ShouldSetCorrectPegPlacements(string input, int x1, int y1, SlotState state1, int x2, int y2, SlotState state2)
+        {
+            // Arrange
+            var initialBoard = new Board(5, 5);
+            var gameState = new GameState(initialBoard);
+
+            // Act
+            gameState.SetPegPlacementsFromString(input);
+
+            // Assert
+            gameState.PegPlacements.Count.ShouldBe(2);
+            gameState.PegPlacements[0].Position.X.ShouldBe(x1);
+            gameState.PegPlacements[0].Position.Y.ShouldBe(y1);
+            gameState.PegPlacements[0].State.ShouldBe(state1);
+            gameState.PegPlacements[1].Position.X.ShouldBe(x2);
+            gameState.PegPlacements[1].Position.Y.ShouldBe(y2);
+            gameState.PegPlacements[1].State.ShouldBe(state2);
+        }
+
         public static IEnumerable<object[]> BoardMetadata =>
             new List<object[]>
             {

@@ -66,6 +66,39 @@ namespace IndyPegSolver.Tests
 
             // Assert
             result.ShouldBe("5-10-L");
+        }        
+
+        [Theory]
+        [InlineData("2-2-L", 2, 2, SlotState.Left)]
+        [InlineData("3-4-R", 3, 4, SlotState.Right)]
+        [InlineData("0-0-L", 0, 0, SlotState.Left)]
+        [InlineData("5-5-R", 5, 5, SlotState.Right)]
+        [InlineData("12-2-L", 12, 2, SlotState.Left)]
+        [InlineData("3-14-R", 3, 14, SlotState.Right)]
+        public void FromString_ShouldCreateCorrectPegPlacement(string input, int expectedX, int expectedY, SlotState expectedState)
+        {
+            // Act
+            PegPlacement result = PegPlacement.FromString(input);
+
+            // Assert
+            result.Position.X.ShouldBe(expectedX);
+            result.Position.Y.ShouldBe(expectedY);
+            result.State.ShouldBe(expectedState);
+        }
+
+        [Theory]
+        [InlineData("1-1-X")]
+        [InlineData("1-2-Y")]
+        [InlineData("3-3-Z")]
+        [InlineData("x-1-L")]
+        [InlineData("1-a-R")]
+        [InlineData("3-,-L")]
+        [InlineData("1-2-L-test")]
+        [InlineData("1-2-LR")]
+        public void FromString_ShouldThrowArgumentException_ForInvalidPegState(string input)
+        {
+            // Act & Assert
+            Should.Throw<ArgumentException>(() => PegPlacement.FromString(input));
         }
 
         [Fact]

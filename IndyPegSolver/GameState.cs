@@ -2,7 +2,7 @@
 
 public class GameState
 {
-    public List<PegPlacement> PegPlacements { get; }
+    public List<PegPlacement> PegPlacements { get; }    
     public Board InitialBoard { get; }
     public Board CurrentBoard { get; private set; }
     public BoardRating Rating { get; private set; }
@@ -44,5 +44,28 @@ public class GameState
     public override string ToString()
     {
         return $"GameState(Rating: {Rating})";
+    }
+
+    public string GetPegPlacementInOrderString()
+    {
+        return string.Join("|", PegPlacements);
+    }
+
+    public void SetPegPlacementsFromString(string pegPlacementString)
+    {
+        PegPlacements.Clear();
+        var placements = pegPlacementString.Split('|');
+        foreach (var placement in placements)
+        {
+            var pegPlacement = PegPlacement.FromString(placement);
+            PegPlacements.Add(pegPlacement);
+        }
+        // Rebuild the board state from the initial board
+        CurrentBoard = InitialBoard.Clone();
+        foreach (var placement in PegPlacements)
+        {
+            CurrentBoard.PlacePeg(placement.Position, placement.State);
+        }
+        UpdateRating();
     }
 }
