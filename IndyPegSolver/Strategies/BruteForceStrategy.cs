@@ -4,8 +4,7 @@ public class BruteForceStrategy : IStrategy
 {
     public List<GameState> FindSolution(GameState gameState)
     {
-        var solutions = new List<GameState>();
-        //var solution = new List<PegPlacement>();
+        var solutions = new List<GameState>();        
         var bestGameState = gameState.Clone();
         var bestPegCount = int.MaxValue;
         var bestUnfilledHoles = int.MaxValue;
@@ -29,11 +28,10 @@ public class BruteForceStrategy : IStrategy
 
                 bestPegCount = gameState.PegPlacements.Count();
                 bestUnfilledHoles = gameState.Rating.UnfilledHolesCount;
-
             }
             
             solutions.Add(gameState.Clone());
-            //return true;
+            //return true; // keep on searching for better/more solutions
         }
 
         if (gameState.PegPlacements.Count() >= bestPegCount && gameState.Rating.UnfilledHolesCount >= bestUnfilledHoles)
@@ -44,14 +42,12 @@ public class BruteForceStrategy : IStrategy
         foreach (var pegPlacement in GetPossiblePegPlacements(gameState))
         {
             gameState.AddPegPlacement(pegPlacement);
-            //solution.Add(pegPlacement);
 
             if (Solve(gameState, bestGameState, solutions, ref bestPegCount, ref bestUnfilledHoles))
             {
                 return true;
             }
 
-            //solution.Remove(pegPlacement);
             gameState.RemovePegPlacement(pegPlacement);
         }
 
@@ -69,9 +65,22 @@ public class BruteForceStrategy : IStrategy
                 var position = new Point(x, y);
                 if (gameState.CurrentBoard.GetSlotState(position) == SlotState.Hole)
                 {
-                    // try right before left
-                    possiblePlacements.Add(new PegPlacement(position, SlotState.Right));
-                    possiblePlacements.Add(new PegPlacement(position, SlotState.Left));
+                    // try mixing l/r placements
+                    var lastPlacedPegState = (gameState.PegPlacements.Any()) ? gameState.PegPlacements.Last().State : SlotState.Left;
+                    if (lastPlacedPegState == SlotState.Left)
+                    {
+                        possiblePlacements.Add(new PegPlacement(position, SlotState.Right));
+                        possiblePlacements.Add(new PegPlacement(position, SlotState.Left));
+                    }
+                    else
+                    {
+                        possiblePlacements.Add(new PegPlacement(position, SlotState.Left));
+                        possiblePlacements.Add(new PegPlacement(position, SlotState.Right));
+                    }
+
+                    // original code
+                    //possiblePlacements.Add(new PegPlacement(position, SlotState.Right));
+                    //possiblePlacements.Add(new PegPlacement(position, SlotState.Left));
                 }
             }
         }
