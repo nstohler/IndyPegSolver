@@ -16,13 +16,13 @@ namespace IndyPegSolver.Tests
             var board = new Board(width, height);
 
             // Assert
-            Assert.Equal(width, board.Width);
-            Assert.Equal(height, board.Height);
+            board.Width.ShouldBe(width);
+            board.Height.ShouldBe(height);
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
-                    Assert.Equal(SlotState.Hole, board.GetSlotState(new Point(i, j)));
+                    board.GetSlotState(new Point(i, j)).ShouldBe(SlotState.Hole);
                 }
             }
         }
@@ -35,8 +35,8 @@ namespace IndyPegSolver.Tests
             int height = 16;
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => new Board(width, height));
-            Assert.Equal("Board dimensions cannot exceed 15x15", exception.Message);
+            var exception = Should.Throw<ArgumentException>(() => new Board(width, height));
+            exception.Message.ShouldBe("Board dimensions cannot exceed 15x15");
         }
 
         [Fact]
@@ -54,10 +54,10 @@ namespace IndyPegSolver.Tests
             var board = new Board(initialState);
 
             // Assert
-            Assert.Equal(3, board.Width);
-            Assert.Equal(3, board.Height);
-            Assert.Equal(SlotState.Hole, board.GetSlotState(new Point(0, 0)));
-            Assert.Equal(SlotState.Solid, board.GetSlotState(new Point(1, 1)));
+            board.Width.ShouldBe(3);
+            board.Height.ShouldBe(3);
+            board.GetSlotState(new Point(0, 0)).ShouldBe(SlotState.Hole);
+            board.GetSlotState(new Point(1, 1)).ShouldBe(SlotState.Solid);
         }
 
         [Fact]
@@ -67,8 +67,8 @@ namespace IndyPegSolver.Tests
             char[,] initialState = new char[16, 16];
 
             // Act & Assert
-            var exception = Assert.Throws<ArgumentException>(() => new Board(initialState));
-            Assert.Equal("Board dimensions cannot exceed 15x15", exception.Message);
+            var exception = Should.Throw<ArgumentException>(() => new Board(initialState));
+            exception.Message.ShouldBe("Board dimensions cannot exceed 15x15");
         }
 
         [Fact]
@@ -158,7 +158,7 @@ namespace IndyPegSolver.Tests
                 {
                     if (board.GetSlotState(new Point(i, j)) != SlotState.Solid)
                     {
-                        Assert.Equal(SlotState.Hole, board.GetSlotState(new Point(i, j)));
+                        board.GetSlotState(new Point(i, j)).ShouldBe(SlotState.Hole);
                     }
                 }
             }
@@ -864,8 +864,8 @@ namespace IndyPegSolver.Tests
             var board2 = new Board(5, 5);
 
             // Act & Assert
-            Assert.Equal(board1, board2);
-            Assert.True(board1.Equals(board2));
+            board1.ShouldBe(board2);
+            board1.Equals(board2).ShouldBeTrue();
         }
 
         [Fact]
@@ -877,8 +877,8 @@ namespace IndyPegSolver.Tests
             board2.PlacePeg(new Point(2, 2), SlotState.Left);
 
             // Act & Assert
-            Assert.NotEqual(board1, board2);
-            Assert.False(board1.Equals(board2));
+            board1.ShouldNotBe(board2);
+            board1.Equals(board2).ShouldBeFalse();
         }
 
         [Fact]
@@ -889,7 +889,7 @@ namespace IndyPegSolver.Tests
             var board2 = new Board(5, 5);
 
             // Act & Assert
-            Assert.Equal(board1.GetHashCode(), board2.GetHashCode());
+            board1.GetHashCode().ShouldBe(board2.GetHashCode());
         }
 
         [Fact]
@@ -901,7 +901,7 @@ namespace IndyPegSolver.Tests
             board2.PlacePeg(new Point(2, 2), SlotState.Right);
 
             // Act & Assert
-            Assert.NotEqual(board1.GetHashCode(), board2.GetHashCode());
+            board1.GetHashCode().ShouldNotBe(board2.GetHashCode());
         }
     }
 }
