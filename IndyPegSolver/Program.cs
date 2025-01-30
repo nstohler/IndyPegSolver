@@ -22,17 +22,19 @@ public class ExampleUsage
         var board = HardcodedBoards.TestBoard1;
 
         var gameState = new GameState(new Board(board.Board));
-        var solver = new GameSolver(new BruteForceStrategy(1));
+        var solver = new GameSolver(new BruteForceStrategy());
 
-        var solution = solver.Solve(gameState);
+        var gameStateSolutions = solver.Solve(gameState);
 
-        if (solution != null)
+        if (gameStateSolutions.Count() > 0)
         {
             Console.WriteLine("Solution found:");
-            foreach (var pegPlacement in solution)
+            foreach (var solutionGameState in gameStateSolutions)
             {
-                Console.WriteLine(pegPlacement);
+                Console.WriteLine(solutionGameState.GetPegPlacementInOrderString());
             }
+            Console.WriteLine("Best solution:");
+            Console.WriteLine(gameStateSolutions.Last().GetPegPlacementInOrderString());
         }
         else
         {

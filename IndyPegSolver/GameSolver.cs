@@ -9,7 +9,7 @@ public class GameSolver
         _strategy = strategy;
     }
 
-    public List<PegPlacement> Solve(GameState gameState)
+    public List<GameState> Solve(GameState gameState)
     {
         return _strategy.FindSolution(gameState);
     }

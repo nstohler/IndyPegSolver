@@ -429,7 +429,7 @@ public class Board
 
     private void AddFilledPoints(PegPlacementRating pegPlacementRating)
     {
-        Point position = pegPlacementRating.PegPlacement.Position;
+        Point position = pegPlacementRating.PegPlacement.Point;
         SlotState state = pegPlacementRating.PegPlacement.State;
 
         if (state == SlotState.Left)

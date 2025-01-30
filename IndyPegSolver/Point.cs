@@ -9,7 +9,7 @@ public struct Point : IComparable<Point>
         Y = y;
     }
 
-    public Point Copy()
+    public Point Clone()
     {
         return new Point(X, Y);
     }

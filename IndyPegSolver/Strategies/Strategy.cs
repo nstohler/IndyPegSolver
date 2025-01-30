@@ -1,5 +1,5 @@
 ﻿
 public interface IStrategy
 {
-    List<PegPlacement> FindSolution(GameState gameState);
+    List<GameState> FindSolution(GameState gameState);
 }

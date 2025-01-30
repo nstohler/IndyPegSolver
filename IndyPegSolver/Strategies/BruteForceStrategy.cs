@@ -2,32 +2,51 @@
 
 public class BruteForceStrategy : IStrategy
 {
-    private int goalPegCount;
+    private int bestPegCount;
+    private int bestUnfilledHoles;
+    private List<GameState> solutions = new List<GameState>();
 
-    public BruteForceStrategy(int goalPegCount)
+    public BruteForceStrategy()
     {
-        this.goalPegCount = goalPegCount;
+        this.bestPegCount = int.MaxValue;
+        this.bestUnfilledHoles = int.MaxValue;
     }
 
-    public List<PegPlacement> FindSolution(GameState gameState)
+    public List<GameState> FindSolution(GameState gameState)
     {
         var solution = new List<PegPlacement>();
-        if (Solve(gameState, solution))
-        {
-            return solution;
-        }
-        return new List<PegPlacement>(); // No solution found
+        Solve(gameState, solution);
+        return this.solutions;
+
+        // if (Solve(gameState, solution))
+        // {
+        //     return this.solutions;
+        // }
+        // return new List<GameState>(); // No solution found        
     }
 
     private bool Solve(GameState gameState, List<PegPlacement> solution)
     {
-        Console.WriteLine($"{gameState.Rating} - {gameState.GetSortedPegPlacementString()}");
-
-        if (gameState.CurrentBoard.IsSolved() && solution.Count == goalPegCount)
+        //gameState.Rating.PegCount
+        if (solution.Count <= bestPegCount && gameState.Rating.UnfilledHolesCount <= bestUnfilledHoles)
         {
-            return true;
+            Console.WriteLine($"{gameState.Rating} - {gameState.GetSortedPegPlacementString()}");
         }
-        
+
+        if (gameState.CurrentBoard.IsSolved())
+        {
+            bestPegCount = solution.Count;
+            bestUnfilledHoles = gameState.Rating.UnfilledHolesCount;
+
+            solutions.Add(gameState.Clone());
+            //return true;
+        }
+
+        if (solution.Count >= bestPegCount && gameState.Rating.UnfilledHolesCount >= bestUnfilledHoles)
+        {
+            return false; // Fast fail if the current solution is worse than the best found so far
+        }
+
         foreach (var pegPlacement in GetPossiblePegPlacements(gameState))
         {
             gameState.AddPegPlacement(pegPlacement);

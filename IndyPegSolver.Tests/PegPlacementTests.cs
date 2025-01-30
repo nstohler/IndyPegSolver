@@ -16,7 +16,7 @@ namespace IndyPegSolver.Tests
             PegPlacement pegPlacement = new PegPlacement(position, state);
 
             // Assert
-            pegPlacement.Position.ShouldBe(position);
+            pegPlacement.Point.ShouldBe(position);
             pegPlacement.State.ShouldBe(state);
         }
 
@@ -81,8 +81,8 @@ namespace IndyPegSolver.Tests
             PegPlacement result = PegPlacement.FromString(input);
 
             // Assert
-            result.Position.X.ShouldBe(expectedX);
-            result.Position.Y.ShouldBe(expectedY);
+            result.Point.X.ShouldBe(expectedX);
+            result.Point.Y.ShouldBe(expectedY);
             result.State.ShouldBe(expectedState);
         }
 
@@ -102,19 +102,19 @@ namespace IndyPegSolver.Tests
         }
 
         [Fact]
-        public void PegPlacement_Copy_ShouldCreateCorrectCopy()
+        public void PegPlacement_Clone_ShouldCreateCorrectClone()
         {
             // Arrange
             PegPlacement original = new PegPlacement(new Point(5, 10), SlotState.Left);
 
             // Act
-            PegPlacement copy = original.Copy();
+            PegPlacement cloned = original.Clone();
 
             // Assert
-            copy.ShouldBe(original);
+            cloned.ShouldBe(original);
             
             #pragma warning disable CA2013
-            ReferenceEquals(original, copy).ShouldBeFalse(); // Ensure they are not the same reference
+            ReferenceEquals(original, cloned).ShouldBeFalse(); // Ensure they are not the same reference
             #pragma warning restore CA2013
         }
 

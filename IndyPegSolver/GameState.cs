@@ -16,10 +16,20 @@ public class GameState
         UpdateRating();
     }
 
+    public GameState Clone()
+    {
+        var clonedGameState = new GameState(InitialBoard.Clone());
+        foreach (var pegPlacement in PegPlacements)
+        {
+            clonedGameState.AddPegPlacement(pegPlacement.Clone());
+        }        
+        return clonedGameState;
+    }
+
     public void AddPegPlacement(PegPlacement pegPlacement)
     {
         PegPlacements.Add(pegPlacement);
-        CurrentBoard.PlacePeg(pegPlacement.Position, pegPlacement.State);
+        CurrentBoard.PlacePeg(pegPlacement.Point, pegPlacement.State);
         UpdateRating();
     }
 
@@ -30,7 +40,7 @@ public class GameState
         CurrentBoard = InitialBoard.Clone();
         foreach (var placement in PegPlacements)
         {
-            CurrentBoard.PlacePeg(placement.Position, placement.State);
+            CurrentBoard.PlacePeg(placement.Point, placement.State);
         }
         UpdateRating();
     }
@@ -71,7 +81,7 @@ public class GameState
         CurrentBoard = InitialBoard.Clone();
         foreach (var placement in PegPlacements)
         {
-            CurrentBoard.PlacePeg(placement.Position, placement.State);
+            CurrentBoard.PlacePeg(placement.Point, placement.State);
         }
         UpdateRating();
     }

@@ -50,7 +50,7 @@ namespace IndyPegSolver.Tests
 
             // Assert
             gameState.PegPlacements.ShouldContain(pegPlacement);
-            gameState.CurrentBoard.GetSlotState(pegPlacement.Position).ShouldBe(SlotState.Left);
+            gameState.CurrentBoard.GetSlotState(pegPlacement.Point).ShouldBe(SlotState.Left);
             gameState.Rating.ShouldBe(new BoardRating(1, gameState.CurrentBoard.CountUnfilledHoles()));
         }
 
@@ -68,7 +68,7 @@ namespace IndyPegSolver.Tests
 
             // Assert
             gameState.PegPlacements.ShouldNotContain(pegPlacement);
-            gameState.CurrentBoard.GetSlotState(pegPlacement.Position).ShouldBe(SlotState.Hole);
+            gameState.CurrentBoard.GetSlotState(pegPlacement.Point).ShouldBe(SlotState.Hole);
             gameState.Rating.ShouldBe(new BoardRating(0, gameState.CurrentBoard.CountUnfilledHoles()));
         }
 
@@ -91,7 +91,7 @@ namespace IndyPegSolver.Tests
             gameState.PegPlacements.ShouldContain(pegPlacement2);
             
             // removed items
-            gameState.CurrentBoard.GetSlotState(pegPlacement1.Position).ShouldBe(SlotState.Hole);
+            gameState.CurrentBoard.GetSlotState(pegPlacement1.Point).ShouldBe(SlotState.Hole);
             gameState.CurrentBoard.GetSlotState(new Point(3,2)).ShouldBe(SlotState.Hole);
             gameState.CurrentBoard.GetSlotState(new Point(4,0)).ShouldBe(SlotState.Hole);
             gameState.CurrentBoard.GetSlotState(new Point(4,1)).ShouldBe(SlotState.Hole);
@@ -104,7 +104,7 @@ namespace IndyPegSolver.Tests
             gameState.CurrentBoard.GetSlotState(new Point(0, 1)).ShouldBe(SlotState.Filled);
             gameState.CurrentBoard.GetSlotState(new Point(0, 2)).ShouldBe(SlotState.Filled);
             gameState.CurrentBoard.GetSlotState(new Point(1, 0)).ShouldBe(SlotState.Filled);
-            gameState.CurrentBoard.GetSlotState(pegPlacement2.Position).ShouldBe(SlotState.Left);
+            gameState.CurrentBoard.GetSlotState(pegPlacement2.Point).ShouldBe(SlotState.Left);
             gameState.CurrentBoard.GetSlotState(new Point(1, 2)).ShouldBe(SlotState.Filled);
             gameState.CurrentBoard.GetSlotState(new Point(2, 0)).ShouldBe(SlotState.Filled);
             gameState.CurrentBoard.GetSlotState(new Point(2, 1)).ShouldBe(SlotState.Filled);
@@ -259,11 +259,11 @@ namespace IndyPegSolver.Tests
 
             // Assert
             gameState.PegPlacements.Count.ShouldBe(2);
-            gameState.PegPlacements[0].Position.X.ShouldBe(x1);
-            gameState.PegPlacements[0].Position.Y.ShouldBe(y1);
+            gameState.PegPlacements[0].Point.X.ShouldBe(x1);
+            gameState.PegPlacements[0].Point.Y.ShouldBe(y1);
             gameState.PegPlacements[0].State.ShouldBe(state1);
-            gameState.PegPlacements[1].Position.X.ShouldBe(x2);
-            gameState.PegPlacements[1].Position.Y.ShouldBe(y2);
+            gameState.PegPlacements[1].Point.X.ShouldBe(x2);
+            gameState.PegPlacements[1].Point.Y.ShouldBe(y2);
             gameState.PegPlacements[1].State.ShouldBe(state2);
         }
 

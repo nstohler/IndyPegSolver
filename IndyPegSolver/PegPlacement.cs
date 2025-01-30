@@ -1,41 +1,41 @@
 public struct PegPlacement
 {
-    public Point Position { get; }
+    public Point Point { get; }
     public SlotState State { get; }
 
-    public PegPlacement(Point position, SlotState state)
+    public PegPlacement(Point point, SlotState state)
     {
         if (state != SlotState.Left && state != SlotState.Right)
         {
             throw new ArgumentException("Invalid peg state");
         }
 
-        Position = position;
+        Point = point;
         State = state;
     }
 
-    public PegPlacement Copy()
+    public PegPlacement Clone()
     {
-        return new PegPlacement(Position.Copy(), State);
+        return new PegPlacement(Point.Clone(), State);
     }
 
     public override bool Equals(object? obj)
     {
         if (obj is PegPlacement other)
         {
-            return Position.Equals(other.Position) && State == other.State;
+            return Point.Equals(other.Point) && State == other.State;
         }
         return false;
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Position, State);
+        return HashCode.Combine(Point, State);
     }
 
     public override string ToString()
     {
-        return $"{Position.X}-{Position.Y}-{(State == SlotState.Left ? "L" : "R")}";
+        return $"{Point.X}-{Point.Y}-{(State == SlotState.Left ? "L" : "R")}";
     }
 
     public static PegPlacement FromString(string placementString)

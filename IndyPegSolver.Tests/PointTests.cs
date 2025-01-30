@@ -21,18 +21,18 @@ namespace IndyPegSolver.Tests
         }
 
         [Fact]
-        public void Point_Copy_ShouldCreateCorrectCopy()
+        public void Point_Clone_ShouldCreateCorrectClone()
         {
             // Arrange
             Point original = new Point(5, 10);
 
             // Act
-            Point copy = original.Copy();
+            Point cloned = original.Clone();
 
             // Assert
-            copy.ShouldBe(original);
+            cloned.ShouldBe(original);
             #pragma warning disable CA2013 
-            ReferenceEquals(original, copy).ShouldBeFalse(); // Ensure they are not the same reference
+            ReferenceEquals(original, cloned).ShouldBeFalse(); // Ensure they are not the same reference
             #pragma warning restore CA2013
         }
 

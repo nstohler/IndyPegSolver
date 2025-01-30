@@ -14,12 +14,12 @@ public class PegPlacementDirectionPositionComparer : IComparer<PegPlacement>
             return result;
         }
 
-        int xComparison = x.Position.X.CompareTo(y.Position.X);
+        int xComparison = x.Point.X.CompareTo(y.Point.X);
         if (xComparison != 0)
         {
             return xComparison;
         }
 
-        return x.Position.Y.CompareTo(y.Position.Y);
+        return x.Point.Y.CompareTo(y.Point.Y);
     }
 }
