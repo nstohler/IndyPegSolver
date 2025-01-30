@@ -207,7 +207,7 @@ namespace IndyPegSolver.Tests
             new List<object[]>
             {
                 new object[] { HardcodedBoards.IndyGameBoard1_1 },
-                //new object[] { HardcodedBoards.IndyGameBoard1_2 },                
+                new object[] { HardcodedBoards.IndyGameBoard1_2 },
             };
 
         [Theory]
@@ -215,63 +215,21 @@ namespace IndyPegSolver.Tests
         public void GameState_ShouldInitializeWithDifferentBoards(BoardMetadata boardMetadata)
         {
             // Arrange            
-            var initialBoard = new Board(boardMetadata.Board);
-
-            // Act
-            var gameState = new GameState(initialBoard);
-
-            // verify all available peg placement solutions
-
-            // convert peg placement ids to classes
-
-            // // Assert
-            // gameState.PegPlacements.ShouldNotBeNull();
-            // gameState.PegPlacements.ShouldBeEmpty();
-            // gameState.InitialBoard.ShouldBe(initialBoard);
-            // gameState.CurrentBoard.ShouldBe(initialBoard);
-            // gameState.Rating.ShouldBe(expectedRating);
-
-            // temp
-            // pegs that lead to a real solution
-            var pegPlacement1 = new PegPlacement(new Point(1, 1), SlotState.Left);
-            var pegPlacement2 = new PegPlacement(new Point(0, 3), SlotState.Right);
-            var pegPlacement3 = new PegPlacement(new Point(4, 2), SlotState.Left);
-            var pegPlacement4 = new PegPlacement(new Point(8, 2), SlotState.Right);
-
-            // Act / Assert
-            gameState.AddPegPlacement(pegPlacement1);
-            gameState.Rating.PegCount.ShouldBe(1);
-            gameState.Rating.UnfilledHolesCount.ShouldBe(16);
-            gameState.Rating.ToString().ShouldBe("[1-16]");
-
-            gameState.AddPegPlacement(pegPlacement2);
-            gameState.Rating.PegCount.ShouldBe(2);
-            gameState.Rating.UnfilledHolesCount.ShouldBe(11);
-            gameState.Rating.ToString().ShouldBe("[2-11]");
-
-            gameState.AddPegPlacement(pegPlacement3);
-            gameState.Rating.PegCount.ShouldBe(3);
-            gameState.Rating.UnfilledHolesCount.ShouldBe(6);
-            gameState.Rating.ToString().ShouldBe("[3-6]");
-
-            // remove 2nd peg
-            gameState.RemovePegPlacement(pegPlacement2);
-            gameState.Rating.PegCount.ShouldBe(2);
-            gameState.Rating.UnfilledHolesCount.ShouldBe(9);
-            gameState.Rating.ToString().ShouldBe("[2-9]");
-
-            // readd 2nd peg
-            gameState.AddPegPlacement(pegPlacement2);
-            gameState.Rating.PegCount.ShouldBe(3);
-            gameState.Rating.UnfilledHolesCount.ShouldBe(6);
-            gameState.Rating.ToString().ShouldBe("[3-6]");
-
-            gameState.AddPegPlacement(pegPlacement4);            
+            var initialBoard = new Board(boardMetadata.Board);            
             
-            // Assert (final)
-            gameState.Rating.PegCount.ShouldBe(4);
-            gameState.Rating.UnfilledHolesCount.ShouldBe(0);
-            gameState.Rating.ToString().ShouldBe("[4-0]");
+            // verify all available peg placement solutions
+            foreach (var pegPlacementString in boardMetadata.ExamplePegPlacementSolutions)
+            {
+                // Act
+                var gameState = new GameState(initialBoard);
+                gameState.SetPegPlacementsFromString(pegPlacementString);
+
+                // Assert
+                var pegPlacementCount = pegPlacementString.Split('|').Count();
+                gameState.Rating.PegCount.ShouldBe(pegPlacementCount);                
+                gameState.Rating.UnfilledHolesCount.ShouldBe(0);
+                gameState.Rating.ToString().ShouldBe($"[{pegPlacementCount}-0]");
+            }
         }
     }    
 }
