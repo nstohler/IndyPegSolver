@@ -75,4 +75,11 @@ public class GameState
         }
         UpdateRating();
     }
+
+    public string GetLeftRightPegCount()
+    {
+        int leftCount = PegPlacements.Count(p => p.State == SlotState.Left);
+        int rightCount = PegPlacements.Count(p => p.State == SlotState.Right);
+        return $"{leftCount}L/{rightCount}R";
+    }
 }

@@ -305,5 +305,62 @@ namespace IndyPegSolver.Tests
                 gameState.Rating.ToString().ShouldBe($"[{pegPlacementCount}-0]");
             }
         }
+
+        [Fact]
+        public void GetLeftRightPegCount_ShouldReturnCorrectCounts()
+        {
+            // Arrange
+            var initialBoard = new Board(5,5);
+            var gameState = new GameState(initialBoard);
+
+            var pegPlacement1 = new PegPlacement(new Point(0, 0), SlotState.Left);
+            var pegPlacement2 = new PegPlacement(new Point(1, 0), SlotState.Right);
+            var pegPlacement3 = new PegPlacement(new Point(2, 0), SlotState.Left);
+
+            gameState.AddPegPlacement(pegPlacement1);
+            gameState.AddPegPlacement(pegPlacement2);
+            gameState.AddPegPlacement(pegPlacement3);
+
+            // Act
+            var result = gameState.GetLeftRightPegCount();
+
+            // Assert
+            result.ShouldBe("2L/1R");
+        }
+
+        [Fact]
+        public void GetLeftRightPegCount_ShouldReturnZeroCountsWhenNoPegsPlaced()
+        {
+            // Arrange
+            var initialBoard = new Board(5,5);
+            var gameState = new GameState(initialBoard);
+
+            // Act
+            var result = gameState.GetLeftRightPegCount();
+
+            // Assert
+            result.ShouldBe("0L/0R");
+        }
+
+        [Fact]
+        public void GetLeftRightPegCount_ShouldReturnCorrectCountsAfterRemovingPeg()
+        {
+            // Arrange
+            var initialBoard = new Board(5,5);
+            var gameState = new GameState(initialBoard);
+
+            var pegPlacement1 = new PegPlacement(new Point(0, 0), SlotState.Left);
+            var pegPlacement2 = new PegPlacement(new Point(1, 0), SlotState.Right);
+
+            gameState.AddPegPlacement(pegPlacement1);
+            gameState.AddPegPlacement(pegPlacement2);
+
+            // Act
+            gameState.RemovePegPlacement(pegPlacement1);
+            var result = gameState.GetLeftRightPegCount();
+
+            // Assert
+            result.ShouldBe("0L/1R");
+        }
     }    
 }
