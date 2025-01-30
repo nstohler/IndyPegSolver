@@ -210,6 +210,7 @@ namespace IndyPegSolver.Tests
                 new object[] { HardcodedBoards.IndyGameBoard1_2 },
                 new object[] { HardcodedBoards.IndyGameBoard2 },
                 new object[] { HardcodedBoards.IndyGameBoard3 },
+                new object[] { HardcodedBoards.IndyGameBoard4 },
             };
 
         [Theory]
