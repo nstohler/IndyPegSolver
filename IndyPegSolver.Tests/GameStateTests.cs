@@ -25,6 +25,19 @@ namespace IndyPegSolver.Tests
         }
 
         [Fact]
+        public void InitialHolesCount_ShouldBeCorrect()
+        {
+            // Arrange
+            var initialBoard = new Board(5, 5);
+
+            // Act
+            var gameState = new GameState(initialBoard);
+
+            // Assert
+            gameState.InitialHolesCount.ShouldBe(25);
+        }
+
+        [Fact]
         public void AddPegPlacement_ShouldUpdateBoardAndRating()
         {
             // Arrange

@@ -6,6 +6,7 @@ public class GameState
     public Board InitialBoard { get; }
     public Board CurrentBoard { get; private set; }
     public BoardRating Rating { get; private set; }
+    public int InitialHolesCount => InitialBoard.CountUnfilledHoles();
 
     public GameState(Board initialBoard)
     {
