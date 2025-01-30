@@ -1,4 +1,5 @@
-﻿public struct BoardRating
+﻿
+public struct BoardRating
 {
     public int PegCount { get; }
     public int UnfilledHolesCount { get; }

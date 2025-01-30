@@ -99,5 +99,53 @@ namespace IndyPegSolver.Tests
 
             gameState.Rating.ShouldBe(new BoardRating(1, gameState.CurrentBoard.CountUnfilledHoles()));
         }
-    }
+
+        [Fact]
+        public void UpdateRating_ShouldUpdateRatingCorrectly()
+        {
+            // Arrange
+            char[,] board = {
+                { 'O', 'O', 'O', 'O' },
+                { 'O', 'O', '-', 'O' },
+                { 'O', 'O', '-', 'O' },
+                { '-', 'O', 'O', 'O' },
+                { '-', '-', 'O', 'O' },
+                { '-', 'O', 'O', '-' },
+                { '-', '-', 'O', '-' },
+                { '-', '-', 'O', '-' },
+                { 'O', 'O', 'O', 'O' }
+            };
+            var initialBoard = new Board(board);
+            var gameState = new GameState(initialBoard);
+            
+            // pegs that lead to a real solution
+            var pegPlacement1 = new PegPlacement(new Point(1, 1), SlotState.Left);
+            var pegPlacement2 = new PegPlacement(new Point(0, 3), SlotState.Right);
+            var pegPlacement3 = new PegPlacement(new Point(4, 2), SlotState.Left);
+            var pegPlacement4 = new PegPlacement(new Point(8, 2), SlotState.Right);
+
+            // Act / Assert
+            gameState.AddPegPlacement(pegPlacement1);
+            gameState.Rating.PegCount.ShouldBe(1);
+            gameState.Rating.UnfilledHolesCount.ShouldBe(16);
+            gameState.Rating.ToString().ShouldBe("[1-16]");
+
+            gameState.AddPegPlacement(pegPlacement2);
+            gameState.Rating.PegCount.ShouldBe(2);
+            gameState.Rating.UnfilledHolesCount.ShouldBe(11);
+            gameState.Rating.ToString().ShouldBe("[2-11]");
+
+            gameState.AddPegPlacement(pegPlacement3);
+            gameState.Rating.PegCount.ShouldBe(3);
+            gameState.Rating.UnfilledHolesCount.ShouldBe(6);
+            gameState.Rating.ToString().ShouldBe("[3-6]");
+
+            gameState.AddPegPlacement(pegPlacement4);            
+            
+            // Assert (final)
+            gameState.Rating.PegCount.ShouldBe(4);
+            gameState.Rating.UnfilledHolesCount.ShouldBe(0);
+            gameState.Rating.ToString().ShouldBe("[4-0]");
+        }
+    }    
 }
