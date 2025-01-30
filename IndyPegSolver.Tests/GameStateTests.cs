@@ -228,17 +228,19 @@ namespace IndyPegSolver.Tests
             var initialBoard = new Board(5, 5);
             var gameState = new GameState(initialBoard);
             var pegPlacement1 = new PegPlacement(new Point(3, 3), SlotState.Right);
-            var pegPlacement2 = new PegPlacement(new Point(2, 2), SlotState.Left);
-            var pegPlacement3 = new PegPlacement(new Point(1, 1), SlotState.Left);
+            var pegPlacement2 = new PegPlacement(new Point(2, 2), SlotState.Right);
+            var pegPlacement3 = new PegPlacement(new Point(2, 3), SlotState.Left);        
+            var pegPlacement4 = new PegPlacement(new Point(1, 1), SlotState.Left);
             gameState.AddPegPlacement(pegPlacement1);
             gameState.AddPegPlacement(pegPlacement2);
             gameState.AddPegPlacement(pegPlacement3);
+            gameState.AddPegPlacement(pegPlacement4);
 
             // Act
             string result = gameState.GetSortedPegPlacementString();
 
             // Assert
-            result.ShouldBe("1-1-L|2-2-L|3-3-R");
+            result.ShouldBe("1-1-L|2-2-R|2-3-L|3-3-R");
         }
 
 

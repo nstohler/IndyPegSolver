@@ -54,7 +54,7 @@ public class GameState
 
     public string GetSortedPegPlacementString()
     {        
-        var sortedPlacements = PegPlacements.OrderBy(p => p, new PegPlacementPositionDirectionComparer()).ToList();        
+        var sortedPlacements = PegPlacements.OrderBy(p => p, new PegPlacementPositionDirectionComparer()).ToList();
         return string.Join("|", sortedPlacements);
     }
 
