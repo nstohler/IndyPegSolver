@@ -130,5 +130,148 @@ public static class HardcodedBoards
         }
     };
 
+    public static BoardMetadata TestBoard1 = new BoardMetadata
+    {
+        Name = "Test Board 1",
+        Description = "Board 1 for unit tests",
+        ExamplePegPlacementSolutions = new List<string>
+        {
+            "1-1-L",            
+        },
+        BestSolutionPegCount = 1,
+        MinimumPegsToStart = 1,
+        Board = new char[,]
+        {
+            { 'O', 'O', 'O' },
+            { 'O', 'O', 'O' },
+            { 'O', 'O', 'O' }
+        }
+    };
+
+    public static BoardMetadata TestBoard2 = new BoardMetadata
+    {
+        Name = "Test Board 2",
+        Description = "Board 2 for unit tests",
+        ExamplePegPlacementSolutions = new List<string>
+        {
+            "1-1-R",
+        },
+        BestSolutionPegCount = 1,
+        MinimumPegsToStart = 1,
+        Board = new char[,]
+        {
+            { '-', 'O', '-' },
+            { 'O', 'O', 'O' },
+            { '-', 'O', '-' }
+        }
+    };
+
+    public static BoardMetadata TestBoard3 = new BoardMetadata
+    {
+        Name = "Test Board 3",
+        Description = "Board 3 for unit tests",
+        ExamplePegPlacementSolutions = new List<string>
+        {
+            "1-1-L|2-3-R",
+            "0-3-R|2-1-R",
+            "1-1-L|1-3-L",
+        },
+        BestSolutionPegCount = 2,
+        MinimumPegsToStart = 1,
+        Board = new char[,]
+        {
+            { 'O', 'O', 'O', 'O' },
+            { '-', 'O', '-', 'O' },
+            { 'O', 'O', 'O', 'O' }
+        }
+    };
+
+    public static BoardMetadata TestBoard4 = new BoardMetadata
+    {
+        Name = "Test Board 4",
+        Description = "Board 4 for unit tests",
+        ExamplePegPlacementSolutions = new List<string>
+        {
+            "0-0-R|3-3-R",
+            "0-3-R|3-0-R",            
+        },
+        BestSolutionPegCount = 2,
+        MinimumPegsToStart = 1,
+        Board = new char[,]
+        {
+            { 'O', 'O', 'O', 'O' },
+            { 'O', '-', '-', 'O' },
+            { 'O', '-', '-', 'O' },
+            { 'O', 'O', 'O', 'O' }
+        }
+    };
+
+    public static BoardMetadata TestBoard5 = new BoardMetadata
+    {
+        Name = "Test Board 5",
+        Description = "Board 5 for unit tests",
+        ExamplePegPlacementSolutions = new List<string>
+        {
+            "0-0-R|4-4-R|2-2-L",
+        },
+        BestSolutionPegCount = 3,
+        MinimumPegsToStart = 2,
+        Board = new char[,]
+        {
+            { 'O', 'O', 'O', 'O', 'O' },
+            { 'O', '-', 'O', '-', 'O' },
+            { 'O', 'O', 'O', 'O', 'O' },
+            { 'O', '-', 'O', '-', 'O' },
+            { 'O', 'O', 'O', 'O', 'O' }
+        }
+    };
+
+    public static BoardMetadata TestBoard6 = new BoardMetadata
+    {
+        Name = "Test Board 6",
+        Description = "Board 6 for unit tests",
+        ExamplePegPlacementSolutions = new List<string>
+        {
+            "0-0-R|4-4-R|2-2-L",
+        },
+        BestSolutionPegCount = 3,
+        MinimumPegsToStart = 2,
+        Board = new char[,]
+        {
+            { 'O', 'O', 'O', 'O', 'O' },
+            { 'O', 'O', '-', '-', 'O' },
+            { 'O', '-', 'O', 'O', 'O' },
+            { 'O', '-', 'O', '-', 'O' },
+            { 'O', 'O', 'O', 'O', 'O' }
+        }
+    };
+
+    public static BoardMetadata TestBoard7 = new BoardMetadata
+    {
+        Name = "Test Board 7",
+        Description = "Board 7 for unit tests",
+        ExamplePegPlacementSolutions = new List<string>
+        {
+            "1-2-L|4-2-L|7-2-L|0-0-R",
+            "1-2-L|4-2-L|7-3-L|8-0-R",
+        },
+        BestSolutionPegCount = 4,
+        MinimumPegsToStart = 3,
+        Board = new char[,]
+        {
+        /*         0    1    2    3   */ 
+        /* 0 */ { 'O', '-', 'O', 'O' },
+        /* 1 */ { 'O', 'O', 'O', 'O' },
+        /* 2 */ { 'O', '-', 'O', '-' },
+        /* 3 */ { 'O', 'O', 'O', '-' },
+        /* 4 */ { 'O', 'O', 'O', 'O' },
+        /* 5 */ { 'O', 'O', 'O', 'O' },
+        /* 6 */ { 'O', '-', 'O', 'O' },
+        /* 7 */ { 'O', '-', 'O', 'O' },
+        /* 8 */ { 'O', 'O', '-', 'O' }
+        }
+    };
+
+
     // Add more hardcoded boards here
 }
