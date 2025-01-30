@@ -66,7 +66,7 @@ namespace IndyPegSolver.Tests
 
             // Assert
             result.ShouldBe("5-10-L");
-        }        
+        }      
 
         [Theory]
         [InlineData("2-2-L", 2, 2, SlotState.Left)]
@@ -119,7 +119,7 @@ namespace IndyPegSolver.Tests
         }
 
         [Fact]
-        public void PegPlacement_Comparer_ShouldSortCorrectly()
+        public void PegPlacement_SortWithPegPlacementDirectionPositionComparer_ShouldSortCorrectly()
         {
             // Arrange
             List<PegPlacement> pegPlacements = new List<PegPlacement>
@@ -141,7 +141,38 @@ namespace IndyPegSolver.Tests
             };
 
             // Act
-            pegPlacements.Sort();
+            pegPlacements.Sort(new PegPlacementDirectionPositionComparer());
+
+            // Assert
+            pegPlacements.ShouldBe(expectedOrder);
+        }
+
+        [Fact]
+        public void PegPlacement_SortWithPegPlacementPositionDirectionComparer_ShouldSortCorrectly()
+        {
+            // Arrange
+            List<PegPlacement> pegPlacements = new List<PegPlacement>
+            {
+                new PegPlacement(new Point(5, 10), SlotState.Left),
+                new PegPlacement(new Point(3, 4), SlotState.Left),
+                new PegPlacement(new Point(3, 4), SlotState.Right),
+                new PegPlacement(new Point(5, 5), SlotState.Left),
+                new PegPlacement(new Point(3, 2), SlotState.Right),
+                new PegPlacement(new Point(1, 1), SlotState.Left)
+            };
+
+            List<PegPlacement> expectedOrder = new List<PegPlacement>
+            {
+                new PegPlacement(new Point(1, 1), SlotState.Left),
+                new PegPlacement(new Point(3, 2), SlotState.Right),
+                new PegPlacement(new Point(3, 4), SlotState.Left),
+                new PegPlacement(new Point(3, 4), SlotState.Right),
+                new PegPlacement(new Point(5, 5), SlotState.Left),
+                new PegPlacement(new Point(5, 10), SlotState.Left)
+            };
+
+            // Act
+            pegPlacements.Sort(new PegPlacementPositionDirectionComparer());
 
             // Assert
             pegPlacements.ShouldBe(expectedOrder);

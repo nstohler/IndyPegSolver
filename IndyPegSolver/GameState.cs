@@ -52,6 +52,12 @@ public class GameState
         return string.Join("|", PegPlacements);
     }
 
+    public string GetSortedPegPlacementString()
+    {        
+        var sortedPlacements = PegPlacements.OrderBy(p => p, new PegPlacementPositionDirectionComparer()).ToList();        
+        return string.Join("|", sortedPlacements);
+    }
+
     public void SetPegPlacementsFromString(string pegPlacementString)
     {
         PegPlacements.Clear();

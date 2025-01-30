@@ -193,6 +193,55 @@ namespace IndyPegSolver.Tests
             result.ShouldBe("3-3-R|2-2-L");
         }
 
+              [Fact]
+        public void GetPegPlacementInOrderString_ShouldReturnCorrectStringExt()
+        {
+            // Arrange
+            List<PegPlacement> pegPlacements = new List<PegPlacement>
+            {
+                new PegPlacement(new Point(5, 10), SlotState.Left),
+                new PegPlacement(new Point(3, 4), SlotState.Right),
+                new PegPlacement(new Point(5, 5), SlotState.Left),
+                new PegPlacement(new Point(3, 2), SlotState.Right),
+                new PegPlacement(new Point(1, 1), SlotState.Left)
+            };
+            var initialBoard = new Board(12, 12);
+            var gameState = new GameState(initialBoard);
+
+            string expectedOrderString = "5-10-L|3-4-R|5-5-L|3-2-R|1-1-L";
+
+            // Act
+            foreach (var pegPlacement in pegPlacements)
+            {
+                gameState.AddPegPlacement(pegPlacement);
+            }
+            string result = gameState.GetPegPlacementInOrderString();
+
+            // Assert
+            result.ShouldBe(expectedOrderString);
+        }
+
+        [Fact]
+        public void GetSortedPegPlacementString_ShouldReturnCorrectString()
+        {
+            // Arrange
+            var initialBoard = new Board(5, 5);
+            var gameState = new GameState(initialBoard);
+            var pegPlacement1 = new PegPlacement(new Point(3, 3), SlotState.Right);
+            var pegPlacement2 = new PegPlacement(new Point(2, 2), SlotState.Left);
+            var pegPlacement3 = new PegPlacement(new Point(1, 1), SlotState.Left);
+            gameState.AddPegPlacement(pegPlacement1);
+            gameState.AddPegPlacement(pegPlacement2);
+            gameState.AddPegPlacement(pegPlacement3);
+
+            // Act
+            string result = gameState.GetSortedPegPlacementString();
+
+            // Assert
+            result.ShouldBe("1-1-L|2-2-L|3-3-R");
+        }
+
+
         [Theory]
         [InlineData("2-2-L|3-3-R", 2, 2, SlotState.Left, 3, 3, SlotState.Right)]
         [InlineData("1-1-L|4-4-R", 1, 1, SlotState.Left, 4, 4, SlotState.Right)]
