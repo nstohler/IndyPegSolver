@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace IndyPegSolver.Tests
 {
+    using Shouldly;
+
     public class GameStateTests
     {
         [Fact]
@@ -15,11 +17,11 @@ namespace IndyPegSolver.Tests
             var gameState = new GameState(initialBoard);
 
             // Assert
-            Assert.NotNull(gameState.PegPlacements);
-            Assert.Empty(gameState.PegPlacements);
-            Assert.Equal(initialBoard, gameState.InitialBoard);
-            Assert.Equal(initialBoard, gameState.CurrentBoard);
-            Assert.Equal(new BoardRating(0, initialBoard.CountUnfilledHoles()), gameState.Rating);
+            gameState.PegPlacements.ShouldNotBeNull();
+            gameState.PegPlacements.ShouldBeEmpty();
+            gameState.InitialBoard.ShouldBe(initialBoard);
+            gameState.CurrentBoard.ShouldBe(initialBoard);
+            gameState.Rating.ShouldBe(new BoardRating(0, initialBoard.CountUnfilledHoles()));
         }
 
         [Fact]
@@ -34,9 +36,9 @@ namespace IndyPegSolver.Tests
             gameState.AddPegPlacement(pegPlacement);
 
             // Assert
-            Assert.Contains(pegPlacement, gameState.PegPlacements);
-            Assert.Equal(SlotState.Left, gameState.CurrentBoard.GetSlotState(pegPlacement.Position));
-            Assert.Equal(new BoardRating(1, gameState.CurrentBoard.CountUnfilledHoles()), gameState.Rating);
+            gameState.PegPlacements.ShouldContain(pegPlacement);
+            gameState.CurrentBoard.GetSlotState(pegPlacement.Position).ShouldBe(SlotState.Left);
+            gameState.Rating.ShouldBe(new BoardRating(1, gameState.CurrentBoard.CountUnfilledHoles()));
         }
 
         [Fact]
@@ -52,9 +54,9 @@ namespace IndyPegSolver.Tests
             gameState.RemovePegPlacement(pegPlacement);
 
             // Assert
-            Assert.DoesNotContain(pegPlacement, gameState.PegPlacements);
-            Assert.Equal(SlotState.Hole, gameState.CurrentBoard.GetSlotState(pegPlacement.Position));
-            Assert.Equal(new BoardRating(0, gameState.CurrentBoard.CountUnfilledHoles()), gameState.Rating);
+            gameState.PegPlacements.ShouldNotContain(pegPlacement);
+            gameState.CurrentBoard.GetSlotState(pegPlacement.Position).ShouldBe(SlotState.Hole);
+            gameState.Rating.ShouldBe(new BoardRating(0, gameState.CurrentBoard.CountUnfilledHoles()));
         }
 
         [Fact]
@@ -72,30 +74,30 @@ namespace IndyPegSolver.Tests
             gameState.RemovePegPlacement(pegPlacement1);
 
             // Assert
-            Assert.DoesNotContain(pegPlacement1, gameState.PegPlacements);
-            Assert.Contains(pegPlacement2, gameState.PegPlacements);
+            gameState.PegPlacements.ShouldNotContain(pegPlacement1);
+            gameState.PegPlacements.ShouldContain(pegPlacement2);
             
             // removed items
-            Assert.Equal(SlotState.Hole, gameState.CurrentBoard.GetSlotState(pegPlacement1.Position));
-            Assert.Equal(SlotState.Hole, gameState.CurrentBoard.GetSlotState(new Point(3,2)));
-            Assert.Equal(SlotState.Hole, gameState.CurrentBoard.GetSlotState(new Point(4,0)));
-            Assert.Equal(SlotState.Hole, gameState.CurrentBoard.GetSlotState(new Point(4,1)));
-            Assert.Equal(SlotState.Hole, gameState.CurrentBoard.GetSlotState(new Point(4,2)));
-            Assert.Equal(SlotState.Hole, gameState.CurrentBoard.GetSlotState(new Point(4,3)));
-            Assert.Equal(SlotState.Hole, gameState.CurrentBoard.GetSlotState(new Point(4,4)));
+            gameState.CurrentBoard.GetSlotState(pegPlacement1.Position).ShouldBe(SlotState.Hole);
+            gameState.CurrentBoard.GetSlotState(new Point(3,2)).ShouldBe(SlotState.Hole);
+            gameState.CurrentBoard.GetSlotState(new Point(4,0)).ShouldBe(SlotState.Hole);
+            gameState.CurrentBoard.GetSlotState(new Point(4,1)).ShouldBe(SlotState.Hole);
+            gameState.CurrentBoard.GetSlotState(new Point(4,2)).ShouldBe(SlotState.Hole);
+            gameState.CurrentBoard.GetSlotState(new Point(4,3)).ShouldBe(SlotState.Hole);
+            gameState.CurrentBoard.GetSlotState(new Point(4,4)).ShouldBe(SlotState.Hole);
 
             // remaining items            
-            Assert.Equal(SlotState.Filled, gameState.CurrentBoard.GetSlotState(new Point(0, 0)));
-            Assert.Equal(SlotState.Filled, gameState.CurrentBoard.GetSlotState(new Point(0, 1)));
-            Assert.Equal(SlotState.Filled, gameState.CurrentBoard.GetSlotState(new Point(0, 2)));
-            Assert.Equal(SlotState.Filled, gameState.CurrentBoard.GetSlotState(new Point(1, 0)));
-            Assert.Equal(SlotState.Left, gameState.CurrentBoard.GetSlotState(pegPlacement2.Position));
-            Assert.Equal(SlotState.Filled, gameState.CurrentBoard.GetSlotState(new Point(1, 2)));
-            Assert.Equal(SlotState.Filled, gameState.CurrentBoard.GetSlotState(new Point(2, 0)));
-            Assert.Equal(SlotState.Filled, gameState.CurrentBoard.GetSlotState(new Point(2, 1)));
-            Assert.Equal(SlotState.Filled, gameState.CurrentBoard.GetSlotState(new Point(2, 2)));
+            gameState.CurrentBoard.GetSlotState(new Point(0, 0)).ShouldBe(SlotState.Filled);
+            gameState.CurrentBoard.GetSlotState(new Point(0, 1)).ShouldBe(SlotState.Filled);
+            gameState.CurrentBoard.GetSlotState(new Point(0, 2)).ShouldBe(SlotState.Filled);
+            gameState.CurrentBoard.GetSlotState(new Point(1, 0)).ShouldBe(SlotState.Filled);
+            gameState.CurrentBoard.GetSlotState(pegPlacement2.Position).ShouldBe(SlotState.Left);
+            gameState.CurrentBoard.GetSlotState(new Point(1, 2)).ShouldBe(SlotState.Filled);
+            gameState.CurrentBoard.GetSlotState(new Point(2, 0)).ShouldBe(SlotState.Filled);
+            gameState.CurrentBoard.GetSlotState(new Point(2, 1)).ShouldBe(SlotState.Filled);
+            gameState.CurrentBoard.GetSlotState(new Point(2, 2)).ShouldBe(SlotState.Filled);
 
-            Assert.Equal(new BoardRating(1, gameState.CurrentBoard.CountUnfilledHoles()), gameState.Rating);
+            gameState.Rating.ShouldBe(new BoardRating(1, gameState.CurrentBoard.CountUnfilledHoles()));
         }
     }
 }

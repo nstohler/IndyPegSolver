@@ -1,4 +1,5 @@
 ﻿using Shouldly;
+using Xunit;
 
 namespace IndyPegSolver.Tests
 {
@@ -14,9 +15,9 @@ namespace IndyPegSolver.Tests
             var pointRating = new PointRating(holePosition);
 
             // Assert
-            Assert.Equal(holePosition, pointRating.HolePosition);
-            Assert.NotNull(pointRating.Fillers);
-            Assert.Empty(pointRating.Fillers);
+            pointRating.HolePosition.ShouldBe(holePosition);
+            pointRating.Fillers.ShouldNotBeNull();
+            pointRating.Fillers.ShouldBeEmpty();
         }
 
         [Fact]
@@ -31,7 +32,7 @@ namespace IndyPegSolver.Tests
             pointRating.AddFiller(filler);
 
             // Assert
-            Assert.Contains(filler, pointRating.Fillers);
+            pointRating.Fillers.ShouldContain(filler);
         }
 
         [Fact]
@@ -52,10 +53,10 @@ namespace IndyPegSolver.Tests
             var pointRatings = board.GeneratePointRatings();
 
             // Assert
-            Assert.Equal(5, pointRatings.Count);
+            pointRatings.Count.ShouldBe(5);
             foreach (var pointRating in pointRatings)
             {
-                Assert.NotEmpty(pointRating.Fillers);
+                pointRating.Fillers.ShouldNotBeEmpty();
             }
         }
 
@@ -77,10 +78,10 @@ namespace IndyPegSolver.Tests
             var pointRatings = board.GeneratePointRatings();
 
             // Assert
-            Assert.Equal(12, pointRatings.Count);
+            pointRatings.Count.ShouldBe(12);
             foreach (var pointRating in pointRatings)
             {
-                Assert.NotEmpty(pointRating.Fillers); // can be empty if not connected to the board (not present in valid game boards!)
+                pointRating.Fillers.ShouldNotBeEmpty(); // can be empty if not connected to the board (not present in valid game boards!)
             }
 
             var pointRating0_0 = pointRatings.Single(pr => pr.HolePosition.Equals(new Point(0, 0)));

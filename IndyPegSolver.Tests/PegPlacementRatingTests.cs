@@ -14,10 +14,10 @@ namespace IndyPegSolver.Tests
             var pegPlacementRating = new PegPlacementRating(pegPlacement);
 
             // Assert
-            Assert.Equal(pegPlacement, pegPlacementRating.PegPlacement);
-            Assert.NotNull(pegPlacementRating.FilledPoints);
-            Assert.Empty(pegPlacementRating.FilledPoints);
-            Assert.Equal(0, pegPlacementRating.Rating);
+            pegPlacementRating.PegPlacement.ShouldBe(pegPlacement);
+            pegPlacementRating.FilledPoints.ShouldNotBeNull();
+            pegPlacementRating.FilledPoints.ShouldBeEmpty();
+            pegPlacementRating.Rating.ShouldBe(0);
         }
 
         [Fact]
@@ -32,8 +32,8 @@ namespace IndyPegSolver.Tests
             pegPlacementRating.AddFilledPoint(filledPoint);
 
             // Assert
-            Assert.Contains(filledPoint, pegPlacementRating.FilledPoints);
-            Assert.Equal(1, pegPlacementRating.Rating);
+            pegPlacementRating.FilledPoints.ShouldContain(filledPoint);
+            pegPlacementRating.Rating.ShouldBe(1);
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace IndyPegSolver.Tests
             string result = pegPlacementRating.ToString();
 
             // Assert
-            Assert.Equal("PegPlacement: 2-2-L, FilledPoints: [(1, 1), (3, 3)], Rating: 2", result);
+            result.ShouldBe("PegPlacement: 2-2-L, FilledPoints: [(1, 1), (3, 3)], Rating: 2");
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace IndyPegSolver.Tests
             var pegPlacementRatings = board.GeneratePegPlacementRatings();
 
             // Assert
-            Assert.Equal(10, pegPlacementRatings.Count); // 5 holes, each with 2 peg placements (Left and Right)
+            pegPlacementRatings.Count.ShouldBe(10); // 5 holes, each with 2 peg placements (Left and Right)
             foreach (var rating in pegPlacementRatings)
             {
                 if(rating.PegPlacement.State == SlotState.Left)
@@ -102,12 +102,6 @@ namespace IndyPegSolver.Tests
             var pegPlacementRatings = board.GeneratePegPlacementRatings();
 
             // Assert
-            //Assert.Equal(10, pegPlacementRatings.Count); 
-            //foreach (var rating in pegPlacementRatings)
-            //{
-            //    //Assert.NotEmpty(rating.FilledPoints);
-            //}
-
             var pegPlacementRating0_0_L = pegPlacementRatings.Single(pr => pr.PegPlacement.Equals(new PegPlacement(new Point(0, 0), SlotState.Left)));
             pegPlacementRating0_0_L.FilledPoints.Count().ShouldBe(2);
 

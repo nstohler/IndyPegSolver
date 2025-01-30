@@ -1,4 +1,6 @@
 using Xunit;
+using Shouldly;
+
 namespace IndyPegSolver.Tests
 {
     public class PointTests
@@ -14,8 +16,8 @@ namespace IndyPegSolver.Tests
             Point point = new Point(x, y);
 
             // Assert
-            Assert.Equal(x, point.X);
-            Assert.Equal(y, point.Y);
+            point.X.ShouldBe(x);
+            point.Y.ShouldBe(y);
         }
 
         [Fact]
@@ -28,9 +30,9 @@ namespace IndyPegSolver.Tests
             Point copy = original.Copy();
 
             // Assert
-            Assert.Equal(original, copy);
+            copy.ShouldBe(original);
             #pragma warning disable CA2013 
-            Assert.False(ReferenceEquals(original, copy)); // Ensure they are not the same reference
+            ReferenceEquals(original, copy).ShouldBeFalse(); // Ensure they are not the same reference
             #pragma warning restore CA2013
         }
 
@@ -42,8 +44,8 @@ namespace IndyPegSolver.Tests
             Point point2 = new Point(5, 10);
 
             // Act & Assert
-            Assert.Equal(point1, point2);
-            Assert.True(point1.Equals(point2));
+            point1.ShouldBe(point2);
+            point1.Equals(point2).ShouldBeTrue();
         }
 
         [Fact]
@@ -54,8 +56,8 @@ namespace IndyPegSolver.Tests
             Point point2 = new Point(10, 5);
 
             // Act & Assert
-            Assert.NotEqual(point1, point2);
-            Assert.False(point1.Equals(point2));
+            point1.ShouldNotBe(point2);
+            point1.Equals(point2).ShouldBeFalse();
         }
 
         [Fact]
@@ -66,7 +68,7 @@ namespace IndyPegSolver.Tests
             Point point2 = new Point(5, 10);
 
             // Act & Assert
-            Assert.Equal(point1.GetHashCode(), point2.GetHashCode());
+            point1.GetHashCode().ShouldBe(point2.GetHashCode());
         }
 
         [Fact]
@@ -79,7 +81,7 @@ namespace IndyPegSolver.Tests
             string result = point.ToString();
 
             // Assert
-            Assert.Equal("(5, 10)", result);
+            result.ShouldBe("(5, 10)");
         }
 
         [Fact]
@@ -108,7 +110,7 @@ namespace IndyPegSolver.Tests
             points.Sort();
 
             // Assert
-            Assert.Equal(expectedOrder, points);
+            points.ShouldBe(expectedOrder);
         }
     }
 }

@@ -1,5 +1,5 @@
 using Xunit;
-using System.Collections.Generic;
+using Shouldly;
 
 namespace IndyPegSolver.Tests
 {
@@ -16,8 +16,8 @@ namespace IndyPegSolver.Tests
             PegPlacement pegPlacement = new PegPlacement(position, state);
 
             // Assert
-            Assert.Equal(position, pegPlacement.Position);
-            Assert.Equal(state, pegPlacement.State);
+            pegPlacement.Position.ShouldBe(position);
+            pegPlacement.State.ShouldBe(state);
         }
 
         [Fact]
@@ -28,8 +28,8 @@ namespace IndyPegSolver.Tests
             PegPlacement pegPlacement2 = new PegPlacement(new Point(5, 10), SlotState.Left);
 
             // Act & Assert
-            Assert.Equal(pegPlacement1, pegPlacement2);
-            Assert.True(pegPlacement1.Equals(pegPlacement2));
+            pegPlacement1.ShouldBe(pegPlacement2);
+            pegPlacement1.Equals(pegPlacement2).ShouldBeTrue();
         }
 
         [Fact]
@@ -40,8 +40,8 @@ namespace IndyPegSolver.Tests
             PegPlacement pegPlacement2 = new PegPlacement(new Point(10, 5), SlotState.Right);
 
             // Act & Assert
-            Assert.NotEqual(pegPlacement1, pegPlacement2);
-            Assert.False(pegPlacement1.Equals(pegPlacement2));
+            pegPlacement1.ShouldNotBe(pegPlacement2);
+            pegPlacement1.Equals(pegPlacement2).ShouldBeFalse();
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace IndyPegSolver.Tests
             PegPlacement pegPlacement2 = new PegPlacement(new Point(5, 10), SlotState.Left);
 
             // Act & Assert
-            Assert.Equal(pegPlacement1.GetHashCode(), pegPlacement2.GetHashCode());
+            pegPlacement1.GetHashCode().ShouldBe(pegPlacement2.GetHashCode());
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace IndyPegSolver.Tests
             string result = pegPlacement.ToString();
 
             // Assert
-            Assert.Equal("5-10-L", result);
+            result.ShouldBe("5-10-L");
         }
 
         [Fact]
@@ -78,9 +78,10 @@ namespace IndyPegSolver.Tests
             PegPlacement copy = original.Copy();
 
             // Assert
-            Assert.Equal(original, copy);
+            copy.ShouldBe(original);
+            
             #pragma warning disable CA2013
-            Assert.False(ReferenceEquals(original, copy)); // Ensure they are not the same reference
+            ReferenceEquals(original, copy).ShouldBeFalse(); // Ensure they are not the same reference
             #pragma warning restore CA2013
         }
 
@@ -89,28 +90,28 @@ namespace IndyPegSolver.Tests
         {
             // Arrange
             List<PegPlacement> pegPlacements = new List<PegPlacement>
-        {
-            new PegPlacement(new Point(5, 10), SlotState.Left),
-            new PegPlacement(new Point(3, 4), SlotState.Right),
-            new PegPlacement(new Point(5, 5), SlotState.Left),
-            new PegPlacement(new Point(3, 2), SlotState.Right),
-            new PegPlacement(new Point(1, 1), SlotState.Left)
-        };
+            {
+                new PegPlacement(new Point(5, 10), SlotState.Left),
+                new PegPlacement(new Point(3, 4), SlotState.Right),
+                new PegPlacement(new Point(5, 5), SlotState.Left),
+                new PegPlacement(new Point(3, 2), SlotState.Right),
+                new PegPlacement(new Point(1, 1), SlotState.Left)
+            };
 
             List<PegPlacement> expectedOrder = new List<PegPlacement>
-        {
-            new PegPlacement(new Point(3, 2), SlotState.Right),
-            new PegPlacement(new Point(3, 4), SlotState.Right),
-            new PegPlacement(new Point(1, 1), SlotState.Left),
-            new PegPlacement(new Point(5, 5), SlotState.Left),
-            new PegPlacement(new Point(5, 10), SlotState.Left)
-        };
+            {
+                new PegPlacement(new Point(3, 2), SlotState.Right),
+                new PegPlacement(new Point(3, 4), SlotState.Right),
+                new PegPlacement(new Point(1, 1), SlotState.Left),
+                new PegPlacement(new Point(5, 5), SlotState.Left),
+                new PegPlacement(new Point(5, 10), SlotState.Left)
+            };
 
             // Act
             pegPlacements.Sort();
 
             // Assert
-            Assert.Equal(expectedOrder, pegPlacements);
+            pegPlacements.ShouldBe(expectedOrder);
         }
     }
 }
