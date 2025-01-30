@@ -2,52 +2,41 @@
 
 public class BruteForceStrategy : IStrategy
 {
-    private int bestPegCount;
-    private int bestUnfilledHoles;
-    private List<GameState> solutions = new List<GameState>();
-
-    public BruteForceStrategy()
-    {
-        this.bestPegCount = int.MaxValue;
-        this.bestUnfilledHoles = int.MaxValue;
-    }
-
     public List<GameState> FindSolution(GameState gameState)
     {
-        var solution = new List<PegPlacement>();
-        Solve(gameState, solution);
-        return this.solutions;
-
-        // if (Solve(gameState, solution))
-        // {
-        //     return this.solutions;
-        // }
-        // return new List<GameState>(); // No solution found        
+        var solutions = new List<GameState>();
+        //var solution = new List<PegPlacement>();
+        var bestGameState = gameState.Clone();
+        var bestPegCount = int.MaxValue;
+        var bestUnfilledHoles = int.MaxValue;
+        Solve(gameState, bestGameState, solutions, ref bestPegCount, ref bestUnfilledHoles);
+        return solutions;
     }
 
-    private bool Solve(GameState gameState, List<PegPlacement> solution)
+    private bool Solve(GameState gameState, GameState bestGameState, List<GameState> solutions, ref int bestPegCount, ref int bestUnfilledHoles)
     {
-        //gameState.Rating.PegCount
-        if (solution.Count < bestPegCount && gameState.Rating.UnfilledHolesCount <= bestUnfilledHoles)
+        if (gameState.PegPlacements.Count() < bestPegCount && gameState.Rating.UnfilledHolesCount <= bestUnfilledHoles)
         {
             Console.WriteLine($"{gameState.Rating} - {gameState.GetSortedPegPlacementString()}");
         }
 
         if (gameState.CurrentBoard.IsSolved())
         {
-            if(bestPegCount > solution.Count)
-            {                
-                this.solutions.Clear(); // only keep the best solutions
+            if (bestPegCount > gameState.PegPlacements.Count())
+            {
+                solutions.Clear(); // only keep the best solutions
+                bestGameState = gameState.Clone();
+
+                bestPegCount = gameState.PegPlacements.Count();
+                bestUnfilledHoles = gameState.Rating.UnfilledHolesCount;
+
             }
-
-            bestPegCount = solution.Count;
-            bestUnfilledHoles = gameState.Rating.UnfilledHolesCount;
-
+            
             solutions.Add(gameState.Clone());
             //return true;
         }
 
-        if (solution.Count >= bestPegCount && gameState.Rating.UnfilledHolesCount >= bestUnfilledHoles)
+        if (gameState.PegPlacements.Count() >= bestPegCount && gameState.Rating.UnfilledHolesCount >= bestUnfilledHoles)
         {
             return false; // Fast fail if the current solution is worse than the best found so far
         }
@@ -55,14 +44,14 @@ public class BruteForceStrategy : IStrategy
         foreach (var pegPlacement in GetPossiblePegPlacements(gameState))
         {
             gameState.AddPegPlacement(pegPlacement);
-            solution.Add(pegPlacement);
+            //solution.Add(pegPlacement);
 
-            if (Solve(gameState, solution))
+            if (Solve(gameState, bestGameState, solutions, ref bestPegCount, ref bestUnfilledHoles))
             {
                 return true;
             }
 
-            solution.Remove(pegPlacement);
+            //solution.Remove(pegPlacement);
             gameState.RemovePegPlacement(pegPlacement);
         }
 
@@ -80,8 +69,9 @@ public class BruteForceStrategy : IStrategy
                 var position = new Point(x, y);
                 if (gameState.CurrentBoard.GetSlotState(position) == SlotState.Hole)
                 {
-                    possiblePlacements.Add(new PegPlacement(position, SlotState.Left));
+                    // try right before left
                     possiblePlacements.Add(new PegPlacement(position, SlotState.Right));
+                    possiblePlacements.Add(new PegPlacement(position, SlotState.Left));
                 }
             }
         }
