@@ -19,7 +19,9 @@ public class ExampleUsage
         //    { '-', '-', 'O', '-' },
         //    { 'O', 'O', 'O', 'O' }
         //});
-        var board = HardcodedBoards.TestBoard1;
+        
+        //var board = HardcodedBoards.TestBoard1;
+        var board = HardcodedBoards.IndyGameBoard1_1;
 
         var gameState = new GameState(new Board(board.Board));
         var solver = new GameSolver(new BruteForceStrategy());
@@ -33,8 +35,18 @@ public class ExampleUsage
             {
                 Console.WriteLine(solutionGameState.GetPegPlacementInOrderString());
             }
-            Console.WriteLine("Best solution:");
+            Console.WriteLine();
+            Console.WriteLine($"Best solution variations found: {gameStateSolutions.Count()}");
+            Console.WriteLine("Best solution example:");
             Console.WriteLine(gameStateSolutions.Last().GetPegPlacementInOrderString());
+            Console.WriteLine();
+            HashSet<string> uniqueSolutions = new HashSet<string>(gameStateSolutions.Select(s => s.GetSortedPegPlacementString()));
+            Console.WriteLine($"Unique solution variations found: {uniqueSolutions.Count()}");
+            Console.WriteLine("unique solutions:");
+            foreach (var solution in uniqueSolutions)
+            {
+                Console.WriteLine(solution);
+            }
         }
         else
         {

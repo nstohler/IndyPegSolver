@@ -28,13 +28,18 @@ public class BruteForceStrategy : IStrategy
     private bool Solve(GameState gameState, List<PegPlacement> solution)
     {
         //gameState.Rating.PegCount
-        if (solution.Count <= bestPegCount && gameState.Rating.UnfilledHolesCount <= bestUnfilledHoles)
+        if (solution.Count < bestPegCount && gameState.Rating.UnfilledHolesCount <= bestUnfilledHoles)
         {
             Console.WriteLine($"{gameState.Rating} - {gameState.GetSortedPegPlacementString()}");
         }
 
         if (gameState.CurrentBoard.IsSolved())
         {
+            if(bestPegCount > solution.Count)
+            {                
+                this.solutions.Clear(); // only keep the best solutions
+            }
+
             bestPegCount = solution.Count;
             bestUnfilledHoles = gameState.Rating.UnfilledHolesCount;
 
