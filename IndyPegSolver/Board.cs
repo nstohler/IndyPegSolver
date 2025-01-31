@@ -343,6 +343,8 @@ public class Board
             }
         }
 
+        pointRatings = pointRatings.OrderBy(r => r, new PointRatingComparer()).ToList();
+
         return pointRatings;
     }
 
@@ -423,6 +425,8 @@ public class Board
                 }
             }
         }
+
+        pegPlacementRatings = pegPlacementRatings.OrderBy(r => r, new PegPlacementRatingComparer()).ToList();
 
         return pegPlacementRatings;
     }
