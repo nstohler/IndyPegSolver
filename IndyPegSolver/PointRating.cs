@@ -34,6 +34,11 @@ public class PointRating
                 PegPlacementRatings.Add(rating);
             }
         }
+        // add point itself to the list
+        var selfPegPlacementRatings = ratings
+            .Where(r => r.PegPlacement.Point.Equals(HolePosition));         
+        PegPlacementRatings.AddRange(selfPegPlacementRatings);
+
         PegPlacementRatings.Sort(new PegPlacementRatingComparer()); // in-place sort fine here?        
     }
 }

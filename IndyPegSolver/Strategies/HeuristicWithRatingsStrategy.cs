@@ -24,7 +24,10 @@ public class HeuristicWithRatingsStrategy : IStrategy
     {
         //Console.WriteLine($"trying - {gameState.GetSortedPegPlacementString()}");
 
-        if (gameState.PegPlacements.Count() < bestPegCount && gameState.Rating.UnfilledHolesCount <= bestUnfilledHoles)
+        if (bestPegCount < int.MaxValue 
+            && bestUnfilledHoles < int.MaxValue
+            && gameState.PegPlacements.Count() < bestPegCount 
+            && gameState.Rating.UnfilledHolesCount <= bestUnfilledHoles)
         {
             Console.WriteLine($"{gameState.Rating} - {gameState.GetSortedPegPlacementString()}");
         }
@@ -83,6 +86,8 @@ public class HeuristicWithRatingsStrategy : IStrategy
                 }
             }
         }
+        // add pointRating points as well at the end. needs more investigation if they should be included in their own PegPlacementRatings or not...
+
 
         // var possiblePlacements : prefer
         // - points with lowest ratings to find peg placements with highest ratings
