@@ -30,10 +30,11 @@ public class ExampleUsage
         //var board = HardcodedBoards.IndyGameBoard1_1;
         var board = HardcodedBoards.IndyGameBoard1_2;
         var gameState = new GameState(new Board(board.Board));
+        
         //var solver = new GameSolver(new BruteForceStrategy());
         //var solver = new GameSolver(new DynamicOrderBruteForceStrategy());
         //var solver = new GameSolver(new HeuristicStrategy(7));
-        var solver = new GameSolver(new HeuristicWithRatingsStrategy(7));
+        var solver = new GameSolver(new HeuristicWithRatingsStrategy(board.BestSolutionPegCount));
 
         var gameStateSolutions = solver.Solve(gameState);
 
