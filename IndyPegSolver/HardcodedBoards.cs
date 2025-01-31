@@ -37,8 +37,8 @@ public static class HardcodedBoards
         {
             "0-4-R|1-2-R|4-1-R|6-6-L|7-8-R|8-3-R|8-0-R"
         },
-        BestSolutionPegCount = 4,
-        MinimumPegsToStart = 3,
+        BestSolutionPegCount = 7,
+        MinimumPegsToStart = 7,
         Board = new char[,]
         {
         /*         0    1    2    3    4    5    6    7    8   */ 
