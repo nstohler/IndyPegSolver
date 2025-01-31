@@ -20,6 +20,6 @@ public struct PegPlacementRating
 
     public override string ToString()
     {
-        return $"PegPlacement: {PegPlacement}, FilledPoints: [{string.Join(", ", FilledPoints)}], Rating: {Rating}";
+        return $"Rating: {Rating}, PegPlacement: {PegPlacement}, FilledPoints: [{string.Join(", ", FilledPoints)}]";
     }
 }

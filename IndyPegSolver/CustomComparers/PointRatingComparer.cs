@@ -21,7 +21,7 @@ public class PointRatingComparer : IComparer<PointRating>
             return Comparer<PointRating?>.Default.Compare(x, y);
         }
 
-        int ratingComparison = y.Rating.CompareTo(x.Rating); // Sort by rating in descending order
+        int ratingComparison = x.Rating.CompareTo(y.Rating); // Sort by rating in ascending order (less options to fill the point)
         if (ratingComparison != 0)
         {
             return ratingComparison;
