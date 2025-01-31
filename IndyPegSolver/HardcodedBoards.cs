@@ -88,7 +88,7 @@ public static class HardcodedBoards
             "0-8-R|1-2-L|1-6-L|1-10-R|3-4-R|3-12-L|4-1-L|5-10-R|6-1-R|7-3-R|7-11-R|8-6-R|8-12-R"
         },
         BestSolutionPegCount = 13,
-        MinimumPegsToStart = 12,
+        MinimumPegsToStart = 13,
         Board = new char[,]
         {
         /*         0    1    2    3    4    5    6    7    8    9   10   11   12   13    */ 
@@ -114,7 +114,7 @@ public static class HardcodedBoards
             "6-0-R|4-1-R|0-1-R|8-2-R|2-3-L|7-5-L|4-6-L|2-7-L|6-9-L|1-10-L|4-11-L|7-12-L|4-13-R|8-8-R",
         },
         BestSolutionPegCount = 14,
-        MinimumPegsToStart = 13,
+        MinimumPegsToStart = 14,
         Board = new char[,]
         {
         /*         0    1    2    3    4    5    6    7    8    9   10   11   12   13    */ 
