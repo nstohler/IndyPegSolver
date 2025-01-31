@@ -20,48 +20,52 @@ public class ExampleUsage
         //    { 'O', 'O', 'O', 'O' }
         //});
 
-        //// board 1_1
-        //var board = HardcodedBoards.IndyGameBoard1_1;
-        //var gameState = new GameState(new Board(board.Board));
-        //var solver = new GameSolver(new HeuristicWithRatingsStrategy(4));
-
-        // board 1_2
-        //var board = HardcodedBoards.TestBoard1;
-        //var board = HardcodedBoards.IndyGameBoard1_1;
-        var board = HardcodedBoards.IndyGameBoard1_2;
-        var gameState = new GameState(new Board(board.Board));
-        
-        //var solver = new GameSolver(new BruteForceStrategy());
-        //var solver = new GameSolver(new DynamicOrderBruteForceStrategy());
-        //var solver = new GameSolver(new HeuristicStrategy(7));
-        var solver = new GameSolver(new HeuristicWithRatingsStrategy(board.BestSolutionPegCount));
-
-        var gameStateSolutions = solver.Solve(gameState);
-
-        if (gameStateSolutions.Count() > 0)
+        var boardsToSolve = new List<BoardMetadata>()
         {
-            //Console.WriteLine("Solution found:");
-            //foreach (var solutionGameState in gameStateSolutions)
-            //{
-            //    Console.WriteLine(solutionGameState.GetPegPlacementInOrderString());
-            //}
-            //Console.WriteLine();
-            //Console.WriteLine($"Best solution variations found: {gameStateSolutions.Count()}");
-            //Console.WriteLine("Best solution example:");
-            //Console.WriteLine(gameStateSolutions.Last().GetPegPlacementInOrderString());
+            HardcodedBoards.IndyGameBoard1_1,
+            HardcodedBoards.IndyGameBoard1_2,
+            HardcodedBoards.IndyGameBoard2
+        };
 
-            Console.WriteLine();
-            HashSet<string> uniqueSolutions = new HashSet<string>(gameStateSolutions.Select(s => s.GetSortedPegPlacementString()));
-            Console.WriteLine($"Unique solution variations found: {uniqueSolutions.Count()}");
-            Console.WriteLine("some unique solutions:");
-            foreach (var solution in uniqueSolutions.Take(int.Min(uniqueSolutions.Count(), 6)))
+        foreach (var board in boardsToSolve)
+        {
+
+            // board 1_2                        
+            var gameState = new GameState(new Board(board.Board));
+
+            //var solver = new GameSolver(new BruteForceStrategy());
+            //var solver = new GameSolver(new DynamicOrderBruteForceStrategy());
+            //var solver = new GameSolver(new HeuristicStrategy(7));
+            var solver = new GameSolver(new HeuristicWithRatingsStrategy(board.BestSolutionPegCount));
+
+            var gameStateSolutions = solver.Solve(gameState);
+
+            if (gameStateSolutions.Count() > 0)
             {
-                Console.WriteLine(solution);
+                //Console.WriteLine("Solution found:");
+                //foreach (var solutionGameState in gameStateSolutions)
+                //{
+                //    Console.WriteLine(solutionGameState.GetPegPlacementInOrderString());
+                //}
+                //Console.WriteLine();
+                //Console.WriteLine($"Best solution variations found: {gameStateSolutions.Count()}");
+                //Console.WriteLine("Best solution example:");
+                //Console.WriteLine(gameStateSolutions.Last().GetPegPlacementInOrderString());
+
+                Console.WriteLine();
+                HashSet<string> uniqueSolutions = new HashSet<string>(gameStateSolutions.Select(s => s.GetSortedPegPlacementString()));
+                Console.WriteLine($"Unique solution variations found: {uniqueSolutions.Count()}");
+                Console.WriteLine("some unique solutions:");
+                foreach (var solution in uniqueSolutions.Take(int.Min(uniqueSolutions.Count(), 6)))
+                {
+                    Console.WriteLine(solution);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No solution found.");
             }
         }
-        else
-        {
-            Console.WriteLine("No solution found.");
-        }
+
     }
 }
