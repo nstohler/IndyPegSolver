@@ -49,7 +49,7 @@ namespace IndyPegSolver.Tests
             string result = pegPlacementRating.ToString();
 
             // Assert
-            result.ShouldBe("PegPlacement: 2-2-L, FilledPoints: [(1, 1), (3, 3)], Rating: 2");
+            result.ShouldBe("Rating: 2, PegPlacement: 2-2-L, FilledPoints: [(1, 1), (3, 3)]");
         }
 
         [Fact]
