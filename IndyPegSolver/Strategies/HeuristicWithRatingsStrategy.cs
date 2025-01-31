@@ -26,8 +26,8 @@ public class HeuristicWithRatingsStrategy : IStrategy
 
         if (bestPegCount < int.MaxValue 
             && bestUnfilledHoles < int.MaxValue
-            //&& gameState.PegPlacements.Count() < bestPegCount 
-            && gameState.PegPlacements.Count() <= bestPegCount 
+            && gameState.PegPlacements.Count() < bestPegCount 
+            //&& gameState.PegPlacements.Count() <= bestPegCount 
             && gameState.Rating.UnfilledHolesCount <= bestUnfilledHoles)
         {
             Console.WriteLine($"{gameState.Rating} - {gameState.GetPegPlacementInOrderString()}");
@@ -69,6 +69,8 @@ public class HeuristicWithRatingsStrategy : IStrategy
         var pegPlacementRatings = gameState.CurrentBoard.GeneratePegPlacementRatings();
         var pointRatings = gameState.CurrentBoard.GeneratePointRatings();
 
+        var lPegHighRatingThreshold = 5;
+
         // new:
         // - use all pegPlacements with ratings > 8 first (8 is max of an L peg placement)
         // - then use the previous strategy 
@@ -77,25 +79,33 @@ public class HeuristicWithRatingsStrategy : IStrategy
             .ToList();
         var lowRatedPegPlacementRatings = pegPlacementRatings
             .Where(rating => rating.Rating <= 8)            
-            .ToList();
-
-        if( highRatedPegPlacementRatings.Count() < 1)
-        {
-            int x = 0;
-        }
+            .ToList();        
 
         foreach (var pointRating in pointRatings)
         {
             pointRating.AddPegPlacementRatings(pegPlacementRatings);
-            //pointRating.AddPegPlacementRatings(lowRatedPegPlacementRatings);
         }
 
+        // buggy? consider the rating.PegPlacementRatings instead of Rating property?
+        var flatPegPlacementRatings = pointRatings
+            .SelectMany(pointRating => pointRating.PegPlacementRatings)
+            .GroupBy(pegPlacementRating => pegPlacementRating.PegPlacement)
+            .Select(group => group.First())
+            .ToList();
+
+        var highPointRatings = flatPegPlacementRatings
+            .Where(rating => rating.Rating > lPegHighRatingThreshold)
+            .ToList();
+        var lowPointRatings = flatPegPlacementRatings
+            .Where(rating => rating.Rating <= lPegHighRatingThreshold)
+            .ToList();
+        
         var seenPegPlacements = new HashSet<PegPlacement>();
         var possiblePlacements = new List<PegPlacement>();
-
-        foreach (var pointRating in pointRatings)
+        
+        foreach (var pegPlacementRating in highPointRatings)
         {
-            foreach (var pegPlacementRating in pointRating.PegPlacementRatings)
+            //foreach (var pegPlacementRating in pointRating.PegPlacementRatings)
             {
                 if (seenPegPlacements.Add(pegPlacementRating.PegPlacement))
                 {
@@ -104,11 +114,53 @@ public class HeuristicWithRatingsStrategy : IStrategy
             }
         }
 
-        // combine the lists / disabled for now, didnt seem to help
-        //possiblePlacements = highRatedPegPlacementRatings
-        //    .Select(rating => rating.PegPlacement)
-        //    .Concat(possiblePlacements)
-        //    .ToList();
+        foreach (var pegPlacementRating in highRatedPegPlacementRatings)
+        {
+            if (seenPegPlacements.Add(pegPlacementRating.PegPlacement))
+            {
+                possiblePlacements.Add(pegPlacementRating.PegPlacement);
+            }
+        }
+
+        foreach (var pegPlacementRating in lowPointRatings)
+        {
+            //foreach (var pegPlacementRating in pointRating.PegPlacementRatings)
+            {
+                if (seenPegPlacements.Add(pegPlacementRating.PegPlacement))
+                {
+                    possiblePlacements.Add(pegPlacementRating.PegPlacement);
+                }
+            }
+        }
+
+        foreach (var pegPlacementRating in lowRatedPegPlacementRatings)
+        {
+            if (seenPegPlacements.Add(pegPlacementRating.PegPlacement))
+            {
+                possiblePlacements.Add(pegPlacementRating.PegPlacement);
+            }
+        }
+
+        // foreach (var pointRating in pointRatings)
+        // {
+        //     foreach (var pegPlacementRating in pointRating.PegPlacementRatings)
+        //     {
+        //         if (seenPegPlacements.Add(pegPlacementRating.PegPlacement))
+        //         {
+        //             possiblePlacements.Add(pegPlacementRating.PegPlacement);
+        //         }
+        //     }
+        // }
+
+        // // combine the lists / disabled for now, didnt seem to help
+        // possiblePlacements = highRatedPegPlacementRatings
+        //     .Select(rating => rating.PegPlacement)
+        //     .Concat(possiblePlacements)
+        //     .ToList();
+
+        // new idea:
+        // fill x holes with lowest rating first
+        // then fill the rest with the highest rating
 
         // old comment: add pointRating points as well at the end. needs more investigation if they should be included in their own PegPlacementRatings or not...
 
