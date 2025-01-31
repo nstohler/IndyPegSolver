@@ -70,8 +70,8 @@ public class HeuristicWithRatingsStrategy : IStrategy
             pointRating.AddPegPlacementRatings(pegPlacementRatings);
         }
 
-        var pegRatings = new List<PegPlacementRating>();
         var seenPegPlacements = new HashSet<PegPlacement>();
+        var possiblePlacements = new List<PegPlacement>();
 
         foreach (var pointRating in pointRatings)
         {
@@ -79,13 +79,10 @@ public class HeuristicWithRatingsStrategy : IStrategy
             {
                 if (seenPegPlacements.Add(pegPlacementRating.PegPlacement))
                 {
-                    pegRatings.Add(pegPlacementRating);
+                    possiblePlacements.Add(pegPlacementRating.PegPlacement);
                 }
             }
         }
-        var possiblePlacements = pegRatings
-            .Select(r => r.PegPlacement)
-            .ToList();
 
         // var possiblePlacements : prefer
         // - points with lowest ratings to find peg placements with highest ratings
@@ -99,7 +96,7 @@ public class HeuristicWithRatingsStrategy : IStrategy
         //     .Select(r => r.PegPlacement)
         //     .ToList();
 
-        
+
 
         // try 1: prioritize peg placements with higher ratings
         // var possiblePlacements = pegPlacementRatings
