@@ -35,11 +35,7 @@ public struct Point : IComparable<Point>
 
     public int CompareTo(Point other)
     {
-        int result = X.CompareTo(other.X);
-        if (result == 0)
-        {
-            result = Y.CompareTo(other.Y);
-        }
-        return result;
-    }
+        PointComparer comparer = new PointComparer();
+        return comparer.Compare(this, other);
+    }    
 }

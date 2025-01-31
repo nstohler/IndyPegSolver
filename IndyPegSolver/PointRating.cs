@@ -5,6 +5,8 @@ public class PointRating
     public Point HolePosition { get; }
     public List<PegPlacement> Fillers { get; } // TODO: sort later when PegPlacementRating is here!
 
+    public int Rating => Fillers.Count;
+
     public PointRating(Point holePosition)
     {
         HolePosition = holePosition;
