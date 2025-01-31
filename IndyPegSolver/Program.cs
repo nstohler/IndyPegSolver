@@ -19,16 +19,21 @@ public class ExampleUsage
         //    { '-', '-', 'O', '-' },
         //    { 'O', 'O', 'O', 'O' }
         //});
-        
+
+        //// board 1_1
+        //var board = HardcodedBoards.IndyGameBoard1_1;
+        //var gameState = new GameState(new Board(board.Board));
+        //var solver = new GameSolver(new HeuristicWithRatingsStrategy(4));
+
+        // board 1_2
         //var board = HardcodedBoards.TestBoard1;
         //var board = HardcodedBoards.IndyGameBoard1_1;
         var board = HardcodedBoards.IndyGameBoard1_2;
-
         var gameState = new GameState(new Board(board.Board));
-        
         //var solver = new GameSolver(new BruteForceStrategy());
         //var solver = new GameSolver(new DynamicOrderBruteForceStrategy());
-        var solver = new GameSolver(new HeuristicStrategy(7));
+        //var solver = new GameSolver(new HeuristicStrategy(7));
+        var solver = new GameSolver(new HeuristicWithRatingsStrategy(7));
 
         var gameStateSolutions = solver.Solve(gameState);
 
