@@ -63,10 +63,50 @@ public class HeuristicWithRatingsStrategy : IStrategy
         // gameState.CurrentBoard.GeneratePegPlacementRatings();
         // gameState.CurrentBoard.GeneratePointRatings();
         var pegPlacementRatings = gameState.CurrentBoard.GeneratePegPlacementRatings();
+        var pointRatings = gameState.CurrentBoard.GeneratePointRatings();
 
-        var possiblePlacements = pegPlacementRatings
-            .Select(r => r.PegPlacement)            
+        foreach (var pointRating in pointRatings)
+        {
+            pointRating.AddPegPlacementRatings(pegPlacementRatings);
+        }
+
+        var pegRatings = new List<PegPlacementRating>();
+        var seenPegPlacements = new HashSet<PegPlacement>();
+
+        foreach (var pointRating in pointRatings)
+        {
+            foreach (var pegPlacementRating in pointRating.PegPlacementRatings)
+            {
+                if (seenPegPlacements.Add(pegPlacementRating.PegPlacement))
+                {
+                    pegRatings.Add(pegPlacementRating);
+                }
+            }
+        }
+        var possiblePlacements = pegRatings
+            .Select(r => r.PegPlacement)
             .ToList();
+
+        // var possiblePlacements : prefer
+        // - points with lowest ratings to find peg placements with highest ratings
+        // - peg placements with higher ratings
+
+
+
+        // var possiblePlacements = pegPlacementRatings
+        //     .OrderByDescending(r => r.Rating)
+        //     .ThenBy(r => pointRatings.FirstOrDefault(p => p.Point == r.PegPlacement.Point)?.Rating ?? int.MaxValue)
+        //     .Select(r => r.PegPlacement)
+        //     .ToList();
+
+        
+
+        // try 1: prioritize peg placements with higher ratings
+        // var possiblePlacements = pegPlacementRatings
+        //     .Select(r => r.PegPlacement)            
+        //     .ToList();
+
+        // mix together peg placement ratings and point ratings
 
         //---
         //var possiblePlacements = GetPossiblePegPlacements(gameState)
