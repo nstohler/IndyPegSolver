@@ -22,8 +22,8 @@ namespace IndyPegSolver.Tests
                 MinimumPegsToStart = 2,
                 Board = new char[,]
                 {
-                { 'O', 'O' },
-                { 'O', '-' }
+                    { 'O', 'O' },
+                    { 'O', '-' }
                 }
             };
 
@@ -48,8 +48,8 @@ namespace IndyPegSolver.Tests
                 MinimumPegsToStart = 2,
                 Board = new char[,]
                 {
-                { 'O', 'O' },
-                { 'O', '-' }
+                    { 'O', 'O' },
+                    { 'O', '-' }
                 }
             };
             var boards = new List<BoardMetadata> { boardMetadata };
@@ -62,6 +62,7 @@ namespace IndyPegSolver.Tests
             boardCollection.LoadFromFile(filePath);
 
             // Assert
+            boardCollection.Boards.ShouldNotBeNull();
             boardCollection.Boards.ShouldContain(boardMetadata);
 
             // Clean up
@@ -83,8 +84,8 @@ namespace IndyPegSolver.Tests
                 MinimumPegsToStart = 2,
                 Board = new char[,]
                 {
-                { 'O', 'O' },
-                { 'O', '-' }
+                    { 'O', 'O' },
+                    { 'O', '-' }
                 }
             };
             boardCollection.AddBoard(boardMetadata);
@@ -96,12 +97,13 @@ namespace IndyPegSolver.Tests
             var json = File.ReadAllText(filePath);
             var loadedBoards = JsonConvert.DeserializeObject<List<BoardMetadata>>(json);
 
+            loadedBoards.ShouldNotBeNull();
             loadedBoards.ShouldContain(boardMetadata);
 
             // Clean up
             File.Delete(filePath);
         }
-    
+
         [Fact]
         public void SaveAndLoadMultipleBoards_ShouldPersistAndRetrieveAllBoards()
         {
@@ -117,8 +119,8 @@ namespace IndyPegSolver.Tests
                 MinimumPegsToStart = 2,
                 Board = new char[,]
                 {
-                { 'O', 'O' },
-                { 'O', '-' }
+                    { 'O', 'O' },
+                    { 'O', '-' }
                 }
             };
             var boardMetadata2 = new BoardMetadata
@@ -130,8 +132,8 @@ namespace IndyPegSolver.Tests
                 MinimumPegsToStart = 3,
                 Board = new char[,]
                 {
-                { 'O', 'O', 'O' },
-                { 'O', '-', 'O' }
+                    { 'O', 'O', 'O' },
+                    { 'O', '-', 'O' }
                 }
             };
             var boardMetadata3 = new BoardMetadata
@@ -143,19 +145,19 @@ namespace IndyPegSolver.Tests
                 MinimumPegsToStart = 4,
                 Board = new char[,]
                 {
-                { 'O', 'O', 'O', 'O' },
-                { 'O', '-', 'O', 'O' }
+                    { 'O', 'O', 'O', 'O' },
+                    { 'O', '-', 'O', 'O' }
                 }
             };
 
-            var hardCodedBoards = new List<BoardMetadata> 
-            { 
-                HardcodedBoards.IndyGameBoard1_1,
-                HardcodedBoards.IndyGameBoard1_2,
-                HardcodedBoards.IndyGameBoard2,
-                HardcodedBoards.IndyGameBoard3,
-                HardcodedBoards.IndyGameBoard4,
-            };
+            var hardCodedBoards = new List<BoardMetadata>
+                {
+                    HardcodedBoards.IndyGameBoard1_1,
+                    HardcodedBoards.IndyGameBoard1_2,
+                    HardcodedBoards.IndyGameBoard2,
+                    HardcodedBoards.IndyGameBoard3,
+                    HardcodedBoards.IndyGameBoard4,
+                };
 
             boardCollection.AddBoard(boardMetadata1);
             boardCollection.AddBoard(boardMetadata2);
@@ -168,6 +170,7 @@ namespace IndyPegSolver.Tests
             loadedBoardCollection.LoadFromFile(filePath);
 
             // Assert
+            loadedBoardCollection.Boards.ShouldNotBeNull();
             loadedBoardCollection.Boards.Count.ShouldBe(boardCollection.Boards.Count);
             loadedBoardCollection.Boards.ShouldContain(boardMetadata1);
             loadedBoardCollection.Boards.ShouldContain(boardMetadata2);

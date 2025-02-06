@@ -11,7 +11,7 @@ public class BoardMetadata : IEquatable<BoardMetadata>
     
     public char[,] Board { get; set; } = new char[0, 0];
 
-    public bool Equals(BoardMetadata other)
+    public bool Equals(BoardMetadata? other)
     {
         if (other == null) return false;
 
@@ -25,7 +25,7 @@ public class BoardMetadata : IEquatable<BoardMetadata>
                Board.Cast<char>().SequenceEqual(other.Board.Cast<char>());
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is BoardMetadata other)
         {
