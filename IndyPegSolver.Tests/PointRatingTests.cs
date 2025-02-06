@@ -9,15 +9,56 @@ namespace IndyPegSolver.Tests
         public void PointRating_ShouldInitializeCorrectly()
         {
             // Arrange
-            var holePosition = new Point(2, 2);
+            var point = new Point(2, 3);
 
             // Act
-            var pointRating = new PointRating(holePosition);
+            var pointRating = new PointRating(point);
 
             // Assert
-            pointRating.HolePosition.ShouldBe(holePosition);
-            pointRating.Fillers.ShouldNotBeNull();
+            pointRating.HolePosition.ShouldBe(point);
             pointRating.Fillers.ShouldBeEmpty();
+            pointRating.PegPlacementRatings.ShouldBeEmpty();
+            pointRating.Rating.ShouldBe(0);
+        }
+
+        [Fact]
+        public void PointRating_ShouldAddFillerCorrectly()
+        {
+            // Arrange
+            var point = new Point(2, 3);
+            var pointRating = new PointRating(point);
+            var filler = new PegPlacement(new Point(1, 1), SlotState.Left);
+
+            // Act
+            pointRating.AddFiller(filler);
+
+            // Assert
+            pointRating.Fillers.ShouldContain(filler);
+            pointRating.Rating.ShouldBe(1);
+        }
+
+        [Fact]
+        public void PointRating_ShouldAddPegPlacementRatingsCorrectly()
+        {
+            // Arrange
+            var point = new Point(2, 3);
+            var pointRating = new PointRating(point);
+            var filler = new PegPlacement(new Point(1, 1), SlotState.Left);
+            pointRating.AddFiller(filler);
+
+            var pegPlacementRatings = new List<PegPlacementRating>
+            {
+                new PegPlacementRating(filler),
+                new PegPlacementRating(new PegPlacement(new Point(2, 3), SlotState.Right))
+            };
+
+            // Act
+            pointRating.AddPegPlacementRatings(pegPlacementRatings);
+
+            // Assert
+            pointRating.PegPlacementRatings.Count.ShouldBe(2);
+            pointRating.PegPlacementRatings.ShouldContain(r => r.PegPlacement.Equals(filler));
+            pointRating.PegPlacementRatings.ShouldContain(r => r.PegPlacement.Point.Equals(point));
         }
 
         [Fact]
@@ -98,6 +139,22 @@ namespace IndyPegSolver.Tests
 
             var pointRating4_0 = pointRatings.Single(pr => pr.HolePosition.Equals(new Point(4, 0)));
             pointRating4_0.Fillers.Count().ShouldBe(1);
+        }
+
+        [Fact]
+        public void PointRating_ToString_ShouldReturnCorrectString()
+        {
+            // Arrange
+            var point = new Point(2, 3);
+            var pointRating = new PointRating(point);
+            var filler = new PegPlacement(new Point(1, 1), SlotState.Left);
+            pointRating.AddFiller(filler);
+
+            // Act
+            var result = pointRating.ToString();
+
+            // Assert
+            result.ShouldBe("Rating: 1, Hole: (2, 3), Fillers: [1-1-L]");
         }
     }
 }
